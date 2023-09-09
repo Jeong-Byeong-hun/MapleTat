@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.masearch.api.CharacterSearch
 import com.example.masearch.api.vo.BaseVo
+import com.example.masearch.util.ItemSort
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,6 +33,7 @@ class MainViewModel @Inject constructor(private val characterSearch: CharacterSe
                     Log.d("MainViewModel", "getUserData: " + data.body()?.data!!.characterVo)
 //                    characterInfo = data.body()!!.data.character
                     baseInfo.postValue(data.body()!!.data)
+                    ItemSort().sortItemList(data.body()!!.data.items)
                 }
 
                 else -> {

@@ -56,7 +56,6 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     lateinit var activity: MainActivity
-    private var testStr = "1234"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,7 +151,7 @@ class MainActivity : ComponentActivity() {
 
         var enabled by remember { mutableStateOf(true) }
         var test by remember {
-            mutableStateOf("")
+            mutableStateOf("xzI존토벤")
         }
 
         LaunchedEffect(key1 = Unit) {
