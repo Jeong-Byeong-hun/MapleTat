@@ -33,7 +33,6 @@ class MainViewModel @Inject constructor(private val characterSearch: CharacterSe
                     Log.d("MainViewModel", "getUserData: " + data.body()?.data!!.characterVo)
 //                    characterInfo = data.body()!!.data.character
                     baseInfo.postValue(data.body()!!.data)
-                    ItemSort().sortItemList(data.body()!!.data.items)
                 }
 
                 else -> {

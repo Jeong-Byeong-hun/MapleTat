@@ -6,12 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -20,17 +24,23 @@ import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.api.vo.CharacterVo
-import com.example.masearch.api.vo.Items
+import com.example.masearch.api.vo.ItemsVo
+import com.example.masearch.util.ItemSort
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -38,8 +48,8 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Stats(charInfo: CharacterVo, items: MutableList<Items>) {
-
+fun Stats(charInfo: CharacterVo, items: MutableList<ItemsVo>) {
+    val scrollState = rememberScrollState()
     val tabData = listOf(
         "기본정보",
         "장비템"
@@ -72,14 +82,34 @@ fun Stats(charInfo: CharacterVo, items: MutableList<Items>) {
 
     HorizontalPager(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.Transparent), count = 2,
+            .fillMaxHeight()
+            .nestedScroll(remember {
+                object : NestedScrollConnection {
+                    override fun onPreScroll(
+                        available: Offset,
+                        source: NestedScrollSource
+                    ): Offset {
+                        return if (available.y > 0) Offset.Zero else Offset(
+                            x = 0f,
+                            y = -scrollState.dispatchRawDelta(-available.y)
+                        )
+                    }
+                }
+            })
+            .background(Color.Transparent),
+        count = 2,
         state = pagerState
     ) {
         when (it) {
             0 -> BasicInfo(charInfo = charInfo)
 
-            1 -> EquipmentList(items = items)
+            1 -> {
+                var itemList = ItemSort().sortItemList(items)
+                itemList = ItemSort().integratePotential(itemList)
+                EquipmentList(items = itemList)
+
+            }
+
 //                Text(
 //                modifier = Modifier.wrapContentSize(),
 //                text = it.toString(),
@@ -231,40 +261,58 @@ fun BasicInfo(charInfo: CharacterVo) {
 }
 
 @Composable
-fun EquipmentList(items: MutableList<Items>) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top,
+fun EquipmentList(items: MutableList<ItemsVo>) {
+
+    LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState())
+            .fillMaxSize()
             .padding(0.dp, 0.dp, 0.dp, 30.dp)
     ) {
-        for (item in items) {
-            Equipment(items = item)
+        items(items) {
+            Equipment(itemsVo = it)
         }
     }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun Equipment(items: Items) {
+fun Equipment(itemsVo: ItemsVo) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp, 8.dp, 16.dp, 0.dp)
     ) {
         GlideImage(
-            model = items.image, contentDescription = items.name, modifier = Modifier
+            model = itemsVo.image, contentDescription = itemsVo.name, modifier = Modifier
                 .height(50.dp)
                 .width(50.dp),
             alignment = Alignment.CenterStart
         )
-        Column(modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp, 0.dp, 0.dp, 0.dp)) {
-            Text(text = items.name)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp, 0.dp, 0.dp, 0.dp)
+        ) {
+            Row {
+                Text(text = itemsVo.name, color = Color.White)
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(text = itemsVo.starforce, color = Color.White)
+            }
+
+            Row {
+                Text(text = itemsVo.potential.grade, color = Color.White)
+                Spacer(modifier = Modifier.width(16.dp))
+                for (item in itemsVo.potential.option) {
+                    if (item is ArrayList<*>) {
+                        Text(
+                            text = item[0].toString() + " " + item[1].toString(),
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                    }
+                }
+            }
+
         }
     }
 

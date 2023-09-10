@@ -7,5 +7,5 @@ data class BaseVo(
     val characterVo: CharacterVo,
 
     @SerializedName("items")
-    val items: MutableList<Items>
+    val items: MutableList<ItemsVo>
 )

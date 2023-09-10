@@ -151,11 +151,11 @@ class MainActivity : ComponentActivity() {
 
         var enabled by remember { mutableStateOf(true) }
         var test by remember {
-            mutableStateOf("xzI존토벤")
+            mutableStateOf("CyberPsycho")
         }
 
         LaunchedEffect(key1 = Unit) {
-            viewModel.getUserData("xzI존토벤x")
+            viewModel.getUserData("CyberPsycho")
         }
 
         Box {
@@ -242,12 +242,6 @@ class MainActivity : ComponentActivity() {
                 ) {
                     MainAvatar(viewModel = viewModel)
                 }
-
-//            LazyColumn(
-//                modifier = Modifier.fillMaxSize()
-//            ) {
-//
-//            }
 
 
             }
@@ -365,7 +359,7 @@ class MainActivity : ComponentActivity() {
     fun MainAvatar(viewModel: MainViewModel) {
         val temp = viewModel.getData().observeAsState()
         LaunchedEffect(key1 = Unit) {
-            viewModel.getUserData("xzI존토벤x")
+            viewModel.getUserData("CyberPsycho")
         }
         if (temp.value != null) {
             if (temp.value?.characterVo == null) {

@@ -2,7 +2,7 @@ package com.example.masearch.api.vo
 
 import com.google.gson.annotations.SerializedName
 
-data class Items(
+data class ItemsVo(
     @SerializedName("image")
     val image: String,
 
