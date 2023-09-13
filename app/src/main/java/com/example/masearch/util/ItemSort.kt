@@ -31,6 +31,85 @@ class ItemSort {
         "아이템 드롭률"
     )
 
+    fun integrateAdditionalPotential(itemList: MutableList<ItemsVo>): MutableList<ItemsVo> {
+        itemList.forEachIndexed { index, item ->
+
+            item.additionalPotential.option.removeIf {
+                item.additionalPotential.grade == ""
+            }
+
+            for (pValue in item.additionalPotential.option) {
+                if (pValue is ArrayList<*>) {
+                    pValue.removeIf {
+                        !magePotentialList.contains(pValue[0])
+                    }
+
+                    if (pValue.size > 1) {
+                        pValue.removeIf {
+                            !pValue[1].toString().contains("%") and !pValue[1].toString()
+                                .contains("초")
+                        }
+                    }
+                }
+            }
+
+            item.additionalPotential.option.removeIf {
+                it is String
+            }
+
+            item.additionalPotential.option as ArrayList<ArrayList<String>>
+            item.additionalPotential.option.removeIf {
+                it.size == 0
+            }
+
+            val tempOptionList = ArrayList<ArrayList<String>>()
+
+
+            for (option in item.additionalPotential.option) {
+
+                val iterator = tempOptionList.listIterator()
+                var isContain = true
+
+                for ((i, value) in iterator.withIndex()) {
+                    if (value.contains(option[0])) {
+                        isContain = false
+
+                        var findIndex = 0
+                        tempOptionList.forEachIndexed { index, it ->
+                            if (it.contains(option[0])) {
+                                findIndex = index
+                            }
+                        }
+
+                        val tempOption = arrayListOf<String>()
+                        tempOption.add(option[0])
+                        tempOption.add(
+                            "+" + (value[1].replace("+", "").replace("%", "")
+                                .toInt() + option[1].replace("+", "").replace("%", "")
+                                .toInt()) + "%"
+                        )
+                        tempOptionList[findIndex] = tempOption
+                    }
+
+                }
+
+                if ((tempOptionList.size == 0 && option.size > 1) or isContain) {
+                    tempOptionList.add(option)
+                }
+
+            }
+
+            item.additionalPotential.option.clear()
+            if (tempOptionList.size > 0) {
+                item.additionalPotential.option.addAll(tempOptionList)
+            }
+
+            Log.d("TAG", "additionalPotential tempOption : " + tempOptionList)
+
+        }
+
+        return itemList
+    }
     fun integratePotential(itemList: MutableList<ItemsVo>): MutableList<ItemsVo> {
 
         itemList.forEachIndexed { index, item ->
@@ -108,6 +187,83 @@ class ItemSort {
             Log.d("TAG", "integratePotential tempOption : " + tempOptionList)
 
         }
+
+        itemList.forEachIndexed { index, item ->
+
+            item.additionalPotential.option.removeIf {
+                item.additionalPotential.grade == ""
+            }
+
+            for (pValue in item.additionalPotential.option) {
+                if (pValue is ArrayList<*>) {
+                    pValue.removeIf {
+                        !magePotentialList.contains(pValue[0])
+                    }
+
+                    if (pValue.size > 1) {
+                        pValue.removeIf {
+                            !pValue[1].toString().contains("%") and !pValue[1].toString()
+                                .contains("초")
+                        }
+                    }
+                }
+            }
+
+            item.additionalPotential.option.removeIf {
+                it is String
+            }
+
+            item.additionalPotential.option as ArrayList<ArrayList<String>>
+            item.additionalPotential.option.removeIf {
+                it.size == 0
+            }
+
+            val tempOptionList = ArrayList<ArrayList<String>>()
+
+
+            for (option in item.additionalPotential.option) {
+
+                val iterator = tempOptionList.listIterator()
+                var isContain = true
+
+                for ((i, value) in iterator.withIndex()) {
+                    if (value.contains(option[0])) {
+                        isContain = false
+
+                        var findIndex = 0
+                        tempOptionList.forEachIndexed { index, it ->
+                            if (it.contains(option[0])) {
+                                findIndex = index
+                            }
+                        }
+
+                        val tempOption = arrayListOf<String>()
+                        tempOption.add(option[0])
+                        tempOption.add(
+                            "+" + (value[1].replace("+", "").replace("%", "")
+                                .toInt() + option[1].replace("+", "").replace("%", "")
+                                .toInt()) + "%"
+                        )
+                        tempOptionList[findIndex] = tempOption
+                    }
+
+                }
+
+                if ((tempOptionList.size == 0 && option.size > 1) or isContain) {
+                    tempOptionList.add(option)
+                }
+
+            }
+
+            item.additionalPotential.option.clear()
+            if (tempOptionList.size > 0) {
+                item.additionalPotential.option.addAll(tempOptionList)
+            }
+
+            Log.d("TAG", "additionalPotential tempOption : " + tempOptionList)
+
+        }
+
 
         return itemList
 //        for (item in itemList) {

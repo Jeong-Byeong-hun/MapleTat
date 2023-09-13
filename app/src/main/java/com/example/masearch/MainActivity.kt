@@ -358,9 +358,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainAvatar(viewModel: MainViewModel) {
         val temp = viewModel.getData().observeAsState()
-        LaunchedEffect(key1 = Unit) {
-            viewModel.getUserData("CyberPsycho")
-        }
+//        LaunchedEffect(key1 = Unit) {
+//            viewModel.getUserData("CyberPsycho")
+//        }
         if (temp.value != null) {
             if (temp.value?.characterVo == null) {
                 return

@@ -40,6 +40,7 @@ import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.api.vo.CharacterVo
 import com.example.masearch.api.vo.ItemsVo
+import com.example.masearch.api.vo.Potential
 import com.example.masearch.util.ItemSort
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -106,6 +107,7 @@ fun Stats(charInfo: CharacterVo, items: MutableList<ItemsVo>) {
             1 -> {
                 var itemList = ItemSort().sortItemList(items)
                 itemList = ItemSort().integratePotential(itemList)
+
                 EquipmentList(items = itemList)
 
             }
@@ -301,18 +303,52 @@ fun Equipment(itemsVo: ItemsVo) {
 
             Row {
                 Text(text = itemsVo.potential.grade, color = Color.White)
-                Spacer(modifier = Modifier.width(16.dp))
-                for (item in itemsVo.potential.option) {
-                    if (item is ArrayList<*>) {
-                        Text(
-                            text = item[0].toString() + " " + item[1].toString(),
-                            color = Color.White
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                    }
+                Spacer(modifier = Modifier.width(8.dp))
+                PotentialText(potential = itemsVo.potential)
+                
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = itemsVo.additionalPotential.grade, color = Color.White)
+                Spacer(modifier = Modifier.width(8.dp))
+                PotentialText(potential = itemsVo.additionalPotential)
+            }
+
+        }
+    }
+}
+
+@Composable
+fun PotentialText(potential: Potential) {
+    for (item in potential.option) {
+        if (item is ArrayList<*>) {
+            var potentialText = ""
+
+            potentialText = when (item[0]) {
+                "몬스터 방어율 무시" -> {
+                    "방무"
+                }
+
+                "보스 몬스터 공격 시 데미지" -> {
+                    "보공"
+                }
+
+                "메소 획득량" -> {
+                    "메획"
+                }
+
+                "아이템 드롭률" -> {
+                    "아획"
+                }
+
+                else -> {
+                    item[0].toString()
                 }
             }
 
+            Text(
+                text = potentialText + " " + item[1].toString(),
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.width(6.dp))
         }
     }
 
