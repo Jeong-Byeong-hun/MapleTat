@@ -114,7 +114,6 @@ class MainActivity : ComponentActivity() {
     fun KotlinWorldDialog(modifier: Modifier, drawable: Drawable?) {
         var showDialog by remember { mutableStateOf(false) }
 
-
         GlideImage(model = drawable,
             contentDescription = "search",
             modifier = Modifier

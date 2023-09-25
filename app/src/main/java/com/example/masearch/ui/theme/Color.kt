@@ -13,9 +13,10 @@ val Pink40 = Color(0xFF7D5260)
 val MainBackgroundColor = Color(0xFF1B1B1B)
 
 val LegendaryBackgroundColor = Color(0x805EA961)
-val UniqueBackgroundColor = Color(0x80FAFE5B)
+val UniqueBackgroundColor = Color(0x80FFD400)
 val EpicBackgroundColor = Color(0x80D770FB)
 val RareBackgroundColor = Color(0x803D4F63)
+val DividerColor = Color(0xE626282b)
 
 val LegendaryTextColor = Color(0xFF00F20A)
 val UniqueTextColor = Color(0xFFFAFF00)

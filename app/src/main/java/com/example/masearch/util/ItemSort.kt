@@ -5,9 +5,15 @@ import com.example.masearch.api.vo.ItemsVo
 
 class ItemSort {
     private val magePotentialList = mutableListOf<String>(
+        "STR",
+        "DEX",
         "INT",
+        "LUK",
+        "최대 HP",
         "올스탯",
         "모든 스킬의 재사용 대기시간",
+        "크리티컬 데미지",
+        "공격력",
         "마력",
         "데미지",
         "몬스터 방어율 무시",
@@ -200,12 +206,12 @@ class ItemSort {
                         !magePotentialList.contains(pValue[0])
                     }
 
-                    if (pValue.size > 1) {
-                        pValue.removeIf {
-                            !pValue[1].toString().contains("%") and !pValue[1].toString()
-                                .contains("초")
-                        }
-                    }
+//                    if (pValue.size > 1) {
+//                        pValue.removeIf {
+//                            !pValue[1].toString().contains("%") and !pValue[1].toString()
+//                                .contains("초")
+//                        }
+//                    }
                 }
             }
 
@@ -218,49 +224,49 @@ class ItemSort {
                 it.size == 0
             }
 
-            val tempOptionList = ArrayList<ArrayList<String>>()
+//            val tempOptionList = ArrayList<ArrayList<String>>()
+//
+//
+//            for (option in item.additionalPotential.option) {
+//
+//                val iterator = tempOptionList.listIterator()
+//                var isContain = true
+//
+//                for ((i, value) in iterator.withIndex()) {
+//                    if (value.contains(option[0])) {
+//                        isContain = false
+//
+//                        var findIndex = 0
+//                        tempOptionList.forEachIndexed { index, it ->
+//                            if (it.contains(option[0])) {
+//                                findIndex = index
+//                            }
+//                        }
+//
+//                        val tempOption = arrayListOf<String>()
+//                        tempOption.add(option[0])
+//                        tempOption.add(
+//                            "+" + (value[1].replace("+", "").replace("%", "")
+//                                .toInt() + option[1].replace("+", "").replace("%", "")
+//                                .toInt()) + "%"
+//                        )
+//                        tempOptionList[findIndex] = tempOption
+//                    }
+//
+//                }
+//
+//                if ((tempOptionList.size == 0 && option.size > 1) or isContain) {
+//                    tempOptionList.add(option)
+//                }
+//
+//            }
+//
+//            item.additionalPotential.option.clear()
+//            if (tempOptionList.size > 0) {
+//                item.additionalPotential.option.addAll(tempOptionList)
+//            }
 
-
-            for (option in item.additionalPotential.option) {
-
-                val iterator = tempOptionList.listIterator()
-                var isContain = true
-
-                for ((i, value) in iterator.withIndex()) {
-                    if (value.contains(option[0])) {
-                        isContain = false
-
-                        var findIndex = 0
-                        tempOptionList.forEachIndexed { index, it ->
-                            if (it.contains(option[0])) {
-                                findIndex = index
-                            }
-                        }
-
-                        val tempOption = arrayListOf<String>()
-                        tempOption.add(option[0])
-                        tempOption.add(
-                            "+" + (value[1].replace("+", "").replace("%", "")
-                                .toInt() + option[1].replace("+", "").replace("%", "")
-                                .toInt()) + "%"
-                        )
-                        tempOptionList[findIndex] = tempOption
-                    }
-
-                }
-
-                if ((tempOptionList.size == 0 && option.size > 1) or isContain) {
-                    tempOptionList.add(option)
-                }
-
-            }
-
-            item.additionalPotential.option.clear()
-            if (tempOptionList.size > 0) {
-                item.additionalPotential.option.addAll(tempOptionList)
-            }
-
-            Log.d("TAG", "additionalPotential tempOption : " + tempOptionList)
+//            Log.d("TAG", "additionalPotential tempOption : " + tempOptionList)
 
         }
 
