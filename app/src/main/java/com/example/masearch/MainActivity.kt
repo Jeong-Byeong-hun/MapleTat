@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
@@ -38,13 +36,18 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.masearch.mainui.SearchDialog
 import com.example.masearch.ui.theme.MaSearchTheme
 import dagger.hilt.android.AndroidEntryPoint
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -69,40 +72,6 @@ class MainActivity : ComponentActivity() {
                     ParallaxEffect(viewModel, activity)
 
                 }
-
-//                Column(
-//                    verticalArrangement = Arrangement.Top,
-//                    horizontalAlignment = Alignment.CenterHorizontally,
-//                    modifier = Modifier.fillMaxSize()
-//                ) {
-//                    MainAvatar(viewModel)
-//
-////                    CardItemGrade().GradeCardView(
-////                        grade = "레전더리",
-////                        cardColor = LegendaryBackgroundColor,
-////                        textColor = LegendaryTextColor
-////                    )
-////                    Spacer(modifier = Modifier.weight(1f))
-////                    CardItemGrade().GradeCardView(
-////                        grade = "유니크",
-////                        cardColor = UniqueBackgroundColor,
-////                        textColor = UniqueTextColor
-////                    )
-////                    Spacer(modifier = Modifier.weight(1f))
-////                    CardItemGrade().GradeCardView(
-////                        grade = "에픽",
-////                        cardColor = EpicBackgroundColor,
-////                        textColor = EpicTextColor
-////                    )
-////                    Spacer(modifier = Modifier.weight(1f))
-////                    CardItemGrade().GradeCardView(
-////                        grade = "레어",
-////                        cardColor = RareBackgroundColor,
-////                        textColor = RareTextColor
-////                    )
-////                    Spacer(modifier = Modifier.weight(1f))
-//                }
-
             }
         }
 
@@ -113,6 +82,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun KotlinWorldDialog(modifier: Modifier, drawable: Drawable?) {
         var showDialog by remember { mutableStateOf(false) }
+        var searchResult by remember { mutableStateOf<String?>(null) }
 
         GlideImage(model = drawable,
             contentDescription = "search",
@@ -126,20 +96,26 @@ class MainActivity : ComponentActivity() {
                 .padding(12.dp))
 
         if (showDialog) {
-            Dialog(onDismissRequest = {
-                showDialog = false
-                viewModel.getUserData("signer001")
-            }) {
-                Surface(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .wrapContentHeight(),
-                    shape = RoundedCornerShape(12.dp),
-                    color = Color.White
-                ) {
-                    DialogContent()
-                }
-            }
+            SearchDialog(onDismiss = { showDialog = false }, onSearch = { searchText ->
+                // 검색 버튼을 누를 때 호출되는 콜백
+                searchResult = "검색 결과: $searchText"
+                viewModel.getUserData(searchText)
+            })
+
+//            Dialog(onDismissRequest = {
+//                showDialog = false
+//                viewModel.getUserData("signer001")
+//            }) {
+//                Surface(
+//                    modifier = Modifier
+//                        .width(200.dp)
+//                        .wrapContentHeight(),
+//                    shape = RoundedCornerShape(12.dp),
+//                    color = Color.White
+//                ) {
+//                    DialogContent()
+//                }
+//            }
         }
     }
 
@@ -147,14 +123,14 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun ParallaxEffect(viewModel: MainViewModel, activity: MainActivity) {
         val state = rememberCollapsingToolbarScaffoldState()
+        var showDialog by remember { mutableStateOf(false) }
+        var receivedText by remember { mutableStateOf("CyberPsycho") }
 
         var enabled by remember { mutableStateOf(true) }
-        var test by remember {
-            mutableStateOf("CyberPsycho")
-        }
+
 
         LaunchedEffect(key1 = Unit) {
-            viewModel.getUserData("CyberPsycho")
+            viewModel.getUserData(receivedText)
         }
 
         Box {
@@ -191,8 +167,7 @@ class MainActivity : ComponentActivity() {
                                     Log.d("TAG", "ParallaxEffect: perv_btn")
                                 }
                                 .align(CenterVertically)
-                                .padding(12.dp)
-                        )
+                                .padding(12.dp))
 
 
 
@@ -206,7 +181,7 @@ class MainActivity : ComponentActivity() {
                             }
                             .align(CenterVertically)
 
-                        ToolbarNickName(name = test, textModifier)
+                        ToolbarNickName(name = receivedText, textModifier)
 
 //                    Text(
 //                        text = "xzI존토벤x",
@@ -224,14 +199,42 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.weight(1f)
                         )
 
-                        KotlinWorldDialog(
-                            modifier = Modifier,
-                            drawable = activity.getDrawable(R.mipmap.search)
-                        )
+                        GlideImage(model = activity.getDrawable(R.mipmap.search),
+                            contentDescription = "search",
+                            modifier = Modifier
+                                .height(40.dp)
+                                .width(40.dp)
+                                .clickable {
+                                    showDialog = true
+                                    Log.d("TAG", "ParallaxEffect: search")
+                                }
+                                .padding(12.dp)
+                                .align(Alignment.CenterVertically))
 
+                        if (showDialog) {
+                            SearchDialog(onDismiss = { showDialog = false },
+                                onSearch = { searchText ->
+                                    // 검색 버튼을 누를 때 호출되는 콜백
+                                    if (searchText.isEmpty()) {
+                                        return@SearchDialog
+                                    }
+
+                                    receivedText = searchText
+                                    viewModel.getUserData(searchText)
+                                })
+
+                        }
                     }
 
-                    ToolbarView(viewModel = viewModel)
+                    val glideModifier = Modifier
+                        .width(150.dp)
+                        .height(150.dp)
+                        .graphicsLayer {
+                            alpha = (state.toolbarState.progress)
+                        }
+
+
+                    ToolbarView(viewModel = viewModel, glideModifier = glideModifier)
 
                 }) {
                 Column(
@@ -255,13 +258,39 @@ class MainActivity : ComponentActivity() {
             modifier = modifier,
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
-            color = Color.White
+            color = Color.White,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+            fontFamily = FontFamily(
+                Font(
+                    R.font.notosans_regular,
+                    FontWeight.Normal,
+                    FontStyle.Normal
+                )
+            )
+        )
+    }
+
+    @Composable
+    fun CharacterInfoText(text: String) {
+        Text(
+            text = text,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            color = Color.White,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+            fontFamily = FontFamily(
+                Font(
+                    R.font.notosans_regular,
+                    FontWeight.Normal,
+                    FontStyle.Normal
+                )
+            )
         )
     }
 
     @OptIn(ExperimentalGlideComposeApi::class)
     @Composable
-    fun ToolbarView(viewModel: MainViewModel) {
+    fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
         val temp = viewModel.getData().observeAsState()
 
         if (temp.value != null) {
@@ -275,9 +304,7 @@ class MainActivity : ComponentActivity() {
                 GlideImage(
                     model = temp.value!!.characterVo.image,
                     contentDescription = "avatar",
-                    modifier = Modifier
-                        .height(150.dp)
-                        .width(150.dp)
+                    modifier = glideModifier
                 )
 
                 Column(
@@ -298,14 +325,8 @@ class MainActivity : ComponentActivity() {
                         horizontalArrangement = Arrangement.Center,
                         verticalAlignment = Alignment.Top
                     ) {
-                        Text(
-                            text = temp.value!!.characterVo.level,
-                            textAlign = TextAlign.Center,
-                            color = Color.White,
-                            fontSize = 13.sp,
-                            fontFamily = FontFamily.Monospace,
-                            modifier = Modifier
-                        )
+
+                        CharacterInfoText(text = temp.value!!.characterVo.level)
                         Spacer(modifier = Modifier.width(8.dp))
                         Divider(
                             modifier = Modifier
@@ -314,14 +335,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = temp.value!!.characterVo.world,
-                            textAlign = TextAlign.Center,
-                            color = Color.White,
-                            fontSize = 13.sp,
-                            fontFamily = FontFamily.Monospace,
-                            modifier = Modifier
-                        )
+                        CharacterInfoText(text = temp.value!!.characterVo.world)
 
                         Spacer(modifier = Modifier.width(8.dp))
                         Divider(
@@ -332,50 +346,28 @@ class MainActivity : ComponentActivity() {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        Text(
-                            text = temp.value!!.characterVo.name,
-                            textAlign = TextAlign.Center,
-                            color = Color.White,
-                            fontSize = 13.sp,
-                            fontFamily = FontFamily.Monospace,
-
-                            )
-
+                        CharacterInfoText(text = temp.value!!.characterVo.name)
 
                     }
-
-
+                    Spacer(
+                        modifier = Modifier.height(8.dp)
+                    )
                 }
-
             }
-
         }
-
     }
 
 
     @Composable
     fun MainAvatar(viewModel: MainViewModel) {
         val temp = viewModel.getData().observeAsState()
-//        LaunchedEffect(key1 = Unit) {
-//            viewModel.getUserData("CyberPsycho")
-//        }
+
         if (temp.value != null) {
-            if (temp.value?.characterVo == null) {
+            if (temp.value?.characterVo == null)
                 return
-            }
+
             Stats(charInfo = temp.value!!.characterVo, items = temp.value!!.items)
-
         }
-
-    }
-
-}
-
-@Composable
-fun MainInfo(viewModel: MainViewModel) {
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getUserData("signer001")
     }
 }
 

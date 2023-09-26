@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun Stats(charInfo: CharacterVo, items: MutableList<ItemsVo>) {
     val scrollState = rememberScrollState()
+
     val tabData = listOf(
         "기본정보",
         "장비템"
@@ -105,19 +106,6 @@ fun Stats(charInfo: CharacterVo, items: MutableList<ItemsVo>) {
     HorizontalPager(
         modifier = Modifier
             .fillMaxSize()
-//            .nestedScroll(remember {
-//                object : NestedScrollConnection {
-//                    override fun onPreScroll(
-//                        available: Offset,
-//                        source: NestedScrollSource
-//                    ): Offset {
-//                        return if (available.y > 0) Offset.Zero else Offset(
-//                            x = 0f,
-//                            y = -scrollState.dispatchRawDelta(-available.y)
-//                        )
-//                    }
-//                }
-//            })
             .background(Color.Transparent),
         count = 2,
         state = pagerState
@@ -211,31 +199,12 @@ fun BasicInfo(charInfo: CharacterVo) {
             .padding(0.dp, 0.dp, 0.dp, 30.dp)
     ) {
 
-//        Box(
-//            modifier = Modifier
-//                .padding(16.dp)
-//                .width(120.dp)
-//                .height(40.dp)
-//                .clip(RoundedCornerShape(5.dp))
-//                .background(Color.Yellow)
-//                .wrapContentSize(Alignment.Center)
-//
-//        ) {
-        BasicTitleTextView(text = "기본 스탯")
-//        }
 
+        BasicTitleTextView(text = "기본 스탯")
         BasicInfoContentsTextView(text = "STR : ${charInfo.str}")
         BasicInfoContentsTextView(text = "DEX : ${charInfo.dex}")
         BasicInfoContentsTextView(text = "INT : ${charInfo.int}")
         BasicInfoContentsTextView(text = "LUK : ${charInfo.luk}")
-
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 4.dp, 0.dp, 0.dp),
-            color = DividerColor,
-            thickness = 1.dp
-        )
 
         BasicInfoContentsTextView(text = "스탯공격력 : ${charInfo.statAttPower[0]} ~ ${charInfo.statAttPower[1]}")
         BasicInfoContentsTextView(text = "크리티컬 데미지 : ${charInfo.criticalDamage}")
@@ -245,7 +214,7 @@ fun BasicInfo(charInfo: CharacterVo) {
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 4.dp, 0.dp, 0.dp),
+                .padding(0.dp, 8.dp, 0.dp, 4.dp),
             color = DividerColor,
             thickness = 1.dp
         )
@@ -271,7 +240,7 @@ fun BasicInfo(charInfo: CharacterVo) {
         Divider(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(0.dp, 4.dp, 0.dp, 0.dp),
+                .padding(0.dp, 8.dp, 0.dp, 4.dp),
             color = DividerColor,
             thickness = 1.dp
         )
@@ -309,10 +278,12 @@ fun Equipment(itemsVo: ItemsVo) {
             .padding(16.dp, 8.dp, 16.dp, 0.dp)
     ) {
         GlideImage(
-            model = itemsVo.image, contentDescription = itemsVo.name, modifier = Modifier
+            model = itemsVo.image, contentDescription = itemsVo.name,
+            modifier = Modifier
                 .height(50.dp)
-                .width(50.dp),
-            alignment = Alignment.CenterStart
+                .width(50.dp)
+                .align(Alignment.CenterVertically),
+            alignment = Alignment.Center
         )
         Column(
             modifier = Modifier
@@ -322,7 +293,7 @@ fun Equipment(itemsVo: ItemsVo) {
             Row {
                 BasicEquipmentTextview(text = itemsVo.name)
                 Spacer(modifier = Modifier.width(6.dp))
-                BasicEquipmentTextview(text = itemsVo.starforce)
+                BasicEquipmentTextview(text = itemsVo.starforce.replace(" 강화", ""))
             }
 
             Column {
@@ -353,34 +324,31 @@ fun Equipment(itemsVo: ItemsVo) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                color = when (itemsVo.additionalPotential.grade) {
-                    "레어" -> RareBackgroundColor
-                    "에픽" -> EpicBackgroundColor
-                    "유니크" -> UniqueBackgroundColor
-                    "레전드리" -> LegendaryBackgroundColor
-                    else -> Color.Transparent
-                }
+                if (itemsVo.additionalPotential.grade.isNotEmpty()) {
+                    color = when (itemsVo.additionalPotential.grade) {
+                        "레어" -> RareBackgroundColor
+                        "에픽" -> EpicBackgroundColor
+                        "유니크" -> UniqueBackgroundColor
+                        "레전드리" -> LegendaryBackgroundColor
+                        else -> Color.Transparent
+                    }
 
-                Card(
-                    shape = RoundedCornerShape(5.dp),
-                    colors = CardDefaults.cardColors(color)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .wrapContentHeight()
-                            .wrapContentWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                    Card(
+                        shape = RoundedCornerShape(5.dp),
+                        colors = CardDefaults.cardColors(color)
                     ) {
-                        BasicEquipmentTextview(text = itemsVo.additionalPotential.grade)
-                        PotentialText(potential = itemsVo.additionalPotential)
+                        Row(
+                            modifier = Modifier
+                                .wrapContentHeight()
+                                .wrapContentWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            BasicEquipmentTextview(text = itemsVo.additionalPotential.grade)
+                            PotentialText(potential = itemsVo.additionalPotential)
+                        }
                     }
                 }
-
-//                BasicEquipmentTextview(text = itemsVo.additionalPotential.grade)
-//
-//                Spacer(modifier = Modifier.width(8.dp))
-//                PotentialText(potential = itemsVo.additionalPotential)
             }
 
         }

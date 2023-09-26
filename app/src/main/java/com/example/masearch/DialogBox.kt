@@ -11,13 +11,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 
 @Composable
-fun DialogContent(){
+fun DialogContent() {
     Column {
         Spacer(
             modifier = Modifier
@@ -25,14 +31,22 @@ fun DialogContent(){
                 .fillMaxWidth()
         )
         Text(
-            "Kotlin World",
+            "닉네임을 검색해주세요.",
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentSize()
                 .padding(vertical = 8.dp),
             fontSize = 16.sp,
-            lineHeight = 17.sp
+            lineHeight = 17.sp,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+            fontFamily = FontFamily(
+                Font(
+                    R.font.notosans_regular,
+                    FontWeight.Normal,
+                    FontStyle.Normal
+                )
+            )
         )
         Spacer(
             modifier = Modifier
@@ -40,11 +54,24 @@ fun DialogContent(){
                 .fillMaxWidth()
         )
         Button(
-            onClick = {}, modifier = Modifier
+            onClick = {
+
+            }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp), shape = RoundedCornerShape(24.dp)
         ) {
-            Text("Enter", fontSize = 16.sp)
+            Text(
+                "검색하기",
+                fontSize = 16.sp,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+                fontFamily = FontFamily(
+                    Font(
+                        R.font.notosans_regular,
+                        FontWeight.Normal,
+                        FontStyle.Normal
+                    )
+                )
+            )
         }
         Spacer(
             modifier = Modifier
