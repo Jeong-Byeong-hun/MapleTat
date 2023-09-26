@@ -1,6 +1,5 @@
 package com.example.masearch
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -22,14 +21,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -50,6 +52,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.mainui.SearchDialog
 import com.example.masearch.ui.theme.MaSearchTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -78,60 +81,18 @@ class MainActivity : ComponentActivity() {
     }
 
 
-    @OptIn(ExperimentalGlideComposeApi::class)
-    @Composable
-    fun KotlinWorldDialog(modifier: Modifier, drawable: Drawable?) {
-        var showDialog by remember { mutableStateOf(false) }
-        var searchResult by remember { mutableStateOf<String?>(null) }
-
-        GlideImage(model = drawable,
-            contentDescription = "search",
-            modifier = Modifier
-                .height(40.dp)
-                .width(40.dp)
-                .clickable {
-                    showDialog = true
-                    Log.d("TAG", "ParallaxEffect: search")
-                }
-                .padding(12.dp))
-
-        if (showDialog) {
-            SearchDialog(onDismiss = { showDialog = false }, onSearch = { searchText ->
-                // 검색 버튼을 누를 때 호출되는 콜백
-                searchResult = "검색 결과: $searchText"
-                viewModel.getUserData(searchText)
-            })
-
-//            Dialog(onDismissRequest = {
-//                showDialog = false
-//                viewModel.getUserData("signer001")
-//            }) {
-//                Surface(
-//                    modifier = Modifier
-//                        .width(200.dp)
-//                        .wrapContentHeight(),
-//                    shape = RoundedCornerShape(12.dp),
-//                    color = Color.White
-//                ) {
-//                    DialogContent()
-//                }
-//            }
-        }
-    }
-
     @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
     @Composable
     fun ParallaxEffect(viewModel: MainViewModel, activity: MainActivity) {
         val state = rememberCollapsingToolbarScaffoldState()
         var showDialog by remember { mutableStateOf(false) }
         var receivedText by remember { mutableStateOf("CyberPsycho") }
-
         var enabled by remember { mutableStateOf(true) }
 
 
-        LaunchedEffect(key1 = Unit) {
-            viewModel.getUserData(receivedText)
-        }
+//        LaunchedEffect(key1 = Unit) {
+//            viewModel.getUserData(receivedText)
+//        }
 
         Box {
             CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
@@ -181,19 +142,7 @@ class MainActivity : ComponentActivity() {
                             }
                             .align(CenterVertically)
 
-                        ToolbarNickName(name = receivedText, textModifier)
-
-//                    Text(
-//                        text = "xzI존토벤x",
-//                        modifier = Modifier
-//                            .graphicsLayer {
-//                                alpha = (1f - state.toolbarState.progress)
-//                            }
-//                            .align(CenterVertically),
-//                        textAlign = TextAlign.Center,
-//                        fontSize = 16.sp,
-//                        color = Color.White
-//                    )
+                        ToolbarNickName(textModifier, viewModel)
 
                         Spacer(
                             modifier = Modifier.weight(1f)
@@ -219,7 +168,7 @@ class MainActivity : ComponentActivity() {
                                         return@SearchDialog
                                     }
 
-                                    receivedText = searchText
+                                    receivedText = searchText.trim()
                                     viewModel.getUserData(searchText)
                                 })
 
@@ -252,22 +201,30 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ToolbarNickName(name: String, modifier: Modifier) {
-        Text(
-            text = name,
-            modifier = modifier,
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            color = Color.White,
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
-            fontFamily = FontFamily(
-                Font(
-                    R.font.notosans_regular,
-                    FontWeight.Normal,
-                    FontStyle.Normal
+    fun ToolbarNickName(modifier: Modifier, viewModel: MainViewModel) {
+        val temp = viewModel.getData().observeAsState()
+
+        if (temp.value != null) {
+            if (temp.value?.characterVo == null) {
+                return
+            }
+
+            Text(
+                text = temp.value!!.characterVo.name,
+                modifier = modifier,
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                color = Color.White,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+                fontFamily = FontFamily(
+                    Font(
+                        R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+                    )
                 )
             )
-        )
+
+        }
+
     }
 
     @Composable
@@ -280,9 +237,7 @@ class MainActivity : ComponentActivity() {
             style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
             fontFamily = FontFamily(
                 Font(
-                    R.font.notosans_regular,
-                    FontWeight.Normal,
-                    FontStyle.Normal
+                    R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
                 )
             )
         )
@@ -292,6 +247,37 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
         val temp = viewModel.getData().observeAsState()
+        val errorValue = viewModel.getErrorLiveData().observeAsState()
+        var snackbarVisible by remember { mutableStateOf(false) }
+
+        var text = "아이디 또는 핸즈가 열려 있는지 확인해 주세요."
+        val snackState = remember { SnackbarHostState() }
+        val snackScope = rememberCoroutineScope()
+
+
+        SnackbarHost(
+            hostState = snackState,
+            Modifier
+                .fillMaxWidth()
+                .padding(4.dp)
+        )
+
+
+
+        fun launchSnackBar() {
+            snackScope.launch {
+                snackState.showSnackbar(
+                    text
+                )
+            }
+        }
+
+        if (errorValue.value?.isNotEmpty() == true) {
+            Log.d("MainViewModel", "ToolbarView: 에러에러")
+            Log.d("MainViewModel", "ToolbarView: " + temp.value.toString())
+            launchSnackBar()
+            viewModel.clearErrorData()
+        }
 
         if (temp.value != null) {
             if (temp.value?.characterVo == null) {
@@ -301,6 +287,7 @@ class MainActivity : ComponentActivity() {
             Box(
                 contentAlignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth()
             ) {
+
                 GlideImage(
                     model = temp.value!!.characterVo.image,
                     contentDescription = "avatar",
@@ -346,7 +333,11 @@ class MainActivity : ComponentActivity() {
                         )
                         Spacer(modifier = Modifier.width(8.dp))
 
-                        CharacterInfoText(text = temp.value!!.characterVo.name)
+                        CharacterInfoText(
+                            text = temp.value!!.characterVo.name + "  " + temp.value!!.characterVo.role.substring(
+                                temp.value!!.characterVo.role.indexOf("/") + 1
+                            )
+                        )
 
                     }
                     Spacer(
@@ -363,12 +354,12 @@ class MainActivity : ComponentActivity() {
         val temp = viewModel.getData().observeAsState()
 
         if (temp.value != null) {
-            if (temp.value?.characterVo == null)
-                return
+            if (temp.value?.characterVo == null) return
 
             Stats(charInfo = temp.value!!.characterVo, items = temp.value!!.items)
         }
     }
+
 }
 
 
