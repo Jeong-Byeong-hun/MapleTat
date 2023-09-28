@@ -248,7 +248,6 @@ class MainActivity : ComponentActivity() {
     fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
         val temp = viewModel.getData().observeAsState()
         val errorValue = viewModel.getErrorLiveData().observeAsState()
-        var snackbarVisible by remember { mutableStateOf(false) }
 
         var text = "아이디 또는 핸즈가 열려 있는지 확인해 주세요."
         val snackState = remember { SnackbarHostState() }
