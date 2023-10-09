@@ -182,7 +182,6 @@ class MainActivity : ComponentActivity() {
                             alpha = (state.toolbarState.progress)
                         }
 
-
                     ToolbarView(viewModel = viewModel, glideModifier = glideModifier)
 
                 }) {
@@ -250,31 +249,31 @@ class MainActivity : ComponentActivity() {
         val errorValue = viewModel.getErrorLiveData().observeAsState()
 
         var text = "아이디 또는 핸즈가 열려 있는지 확인해 주세요."
-        val snackState = remember { SnackbarHostState() }
-        val snackScope = rememberCoroutineScope()
+//        val snackState = remember { SnackbarHostState() }
+//        val snackScope = rememberCoroutineScope()
 
 
-        SnackbarHost(
-            hostState = snackState,
-            Modifier
-                .fillMaxWidth()
-                .padding(4.dp)
-        )
-
-
-
-        fun launchSnackBar() {
-            snackScope.launch {
-                snackState.showSnackbar(
-                    text
-                )
-            }
-        }
+//        SnackbarHost(
+//            hostState = snackState,
+//            Modifier
+//                .fillMaxWidth()
+//                .padding(4.dp)
+//        )
+//
+//
+//
+//        fun launchSnackBar() {
+//            snackScope.launch {
+//                snackState.showSnackbar(
+//                    text
+//                )
+//            }
+//        }
 
         if (errorValue.value?.isNotEmpty() == true) {
             Log.d("MainViewModel", "ToolbarView: 에러에러")
             Log.d("MainViewModel", "ToolbarView: " + temp.value.toString())
-            launchSnackBar()
+//            launchSnackBar()
             viewModel.clearErrorData()
         }
 

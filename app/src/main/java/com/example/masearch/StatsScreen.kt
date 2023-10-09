@@ -115,6 +115,7 @@ fun Stats(charInfo: CharacterVo, items: MutableList<ItemsVo>) {
 
             1 -> {
                 var itemList = ItemSort().sortItemList(items)
+                itemList.removeIf { it -> it.name == "" }
                 itemList = ItemSort().integratePotential(itemList)
 
                 EquipmentList(items = itemList)

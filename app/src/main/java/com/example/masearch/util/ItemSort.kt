@@ -317,7 +317,7 @@ class ItemSort {
         sortItemList.add(itemList[11])
 
         //빈 아이템 삭제
-        sortItemList.removeIf { it.name == "" }
+//        sortItemList.removeIf { it.name == "" }
 
 //        Log.d("TAG", "sortItemList: " + sortItemList)
         return sortItemList
