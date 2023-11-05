@@ -47,10 +47,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.rememberNavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.mainui.SearchDialog
 import com.example.masearch.ui.theme.MaSearchTheme
+import com.example.masearch.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -70,11 +72,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaSearchTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    ParallaxEffect(viewModel, activity)
+                Navigation()
 
-                }
+                // A surface container using the 'background' color from the theme
+//                Surface(modifier = Modifier.fillMaxSize()) {
+//                    ParallaxEffect(viewModel, activity)
+//
+//                }
             }
         }
 
