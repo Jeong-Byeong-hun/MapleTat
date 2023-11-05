@@ -5,4 +5,6 @@ sealed class Screen(val route: String) {
     object SearchScreen : Screen("search_screen/{searchId}") {
         fun searchCharacter(searchId: String) = "search_screen/$searchId"
     }
+
+    object StatScreen : Screen("stat_screen")
 }
