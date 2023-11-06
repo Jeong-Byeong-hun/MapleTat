@@ -19,7 +19,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -35,7 +37,9 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -48,34 +52,25 @@ import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView(navController: NavController) {
+    
+    var id by remember { mutableStateOf(TextFieldValue("")) }
+    
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Screen 1")
-        Button(onClick = { navController.navigate(Screen.SearchScreen.searchCharacter("test")) }) {
+        TextField(value = id, onValueChange = {s -> id = s }, placeholder = { Text(text = "아이디를 입력해주세요.")}, singleLine = true)
+        Button(onClick = { navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString())) }) {
             Text(text = "Navigate to next screen")
         }
     }
 }
 
-@Composable
-fun SearchScreen2(navigateBack: () -> Unit, id: String?) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "$id")
-
-        Button(onClick = navigateBack) {
-            Text(text = "Navigate to back")
-        }
-    }
-}
 
 @OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -87,13 +82,16 @@ fun ParallaxEffect(
 ) {
     val state = rememberCollapsingToolbarScaffoldState()
     var showDialog by remember { mutableStateOf(false) }
-    var receivedText by remember { mutableStateOf("CyberPsycho") }
+    var receivedText by remember { mutableStateOf(id) }
     var enabled by remember { mutableStateOf(true) }
 
+    Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
+    Log.d("TAG", "ParallaxEffect: ID " + id)
 
-//        LaunchedEffect(key1 = Unit) {
-//            viewModel.getUserData(receivedText)
-//        }
+
+        LaunchedEffect(key1 = Unit) {
+            viewModel.getUserData(receivedText!!)
+        }
 
     Box {
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
@@ -142,6 +140,19 @@ fun ParallaxEffect(
                         .align(Alignment.CenterVertically)
 
                     ToolbarNickName(textModifier, viewModel)
+
+                    Text(
+                        text = id.toString(),
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp,
+                        color = Color.White,
+                        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+                        fontFamily = FontFamily(
+                            Font(
+                                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+                            )
+                        )
+                    )
 
                     Spacer(
                         modifier = Modifier.weight(1f)
