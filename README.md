@@ -9,8 +9,8 @@
 
 사용한 기술 
 
-Compose
-Glide
-Hilt
-Retrofit2
-Compose Navigation
+Compose \n
+Glide \n
+Hilt \n
+Retrofit2 \n
+Compose Navigation \n
