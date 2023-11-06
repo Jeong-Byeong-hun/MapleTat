@@ -26,7 +26,7 @@ fun Navigation(viewModel: MainViewModel, activity: MainActivity) {
             arguments = listOf(navArgument(name = "searchId") {
                 type = NavType.StringType
             })
-        ) { it ->
+        ) {
             ParallaxEffect(
                 navigateBack = {
                     navController.popBackStack(
