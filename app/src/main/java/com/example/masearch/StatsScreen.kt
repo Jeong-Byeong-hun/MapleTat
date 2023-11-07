@@ -5,7 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.Spacer
+
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,15 +28,10 @@ import androidx.compose.material.Text
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -48,17 +45,65 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.api.vo.CharacterVo
 import com.example.masearch.api.vo.ItemsVo
 import com.example.masearch.api.vo.Potential
-import com.example.masearch.mainui.CardItemGrade
 import com.example.masearch.ui.theme.DividerColor
 import com.example.masearch.ui.theme.EpicBackgroundColor
 import com.example.masearch.ui.theme.LegendaryBackgroundColor
 import com.example.masearch.ui.theme.RareBackgroundColor
 import com.example.masearch.ui.theme.UniqueBackgroundColor
+import com.example.masearch.util.AddOptionCalculator
 import com.example.masearch.util.ItemSort
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+
+val emptyAddOption = listOf(
+    "어깨장식",
+    "반지",
+    "뱃지",
+    "엠블렘",
+    "안드로이드",
+    "기계 심장",
+    "훈장",
+    "메달",
+    "로자리오",
+    "쇠사슬",
+    "마도서",
+    "방패",
+    "화살깃",
+    "활골무",
+    "렐릭",
+    "부적",
+    "단검용 검집",
+    "블레이드",
+    "리스트밴드",
+    "조준기",
+    "화약통",
+    "보석",
+    "소울실드",
+    "장약",
+    "마법구슬",
+    "화살촉",
+    "매그넘",
+    "컨트롤러",
+    "포스실드",
+    "무게추",
+    "문서",
+    "오브",
+    "마법화살",
+    "카드",
+    "여우 구슬",
+    "용의 정수",
+    "소울링",
+    "무기 전송장치",
+    "웨폰 벨트",
+    "브레이슬릿",
+    "매직윙",
+    "패스 오브 어비스",
+    "노리개",
+    "선추",
+    "체스피스"
+)
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -118,7 +163,7 @@ fun Stats(charInfo: CharacterVo, items: MutableList<ItemsVo>) {
                 itemList.removeIf { it -> it.name == "" }
                 itemList = ItemSort().integratePotential(itemList)
 
-                EquipmentList(items = itemList)
+                EquipmentList(items = itemList, jobClass = charInfo.role)
 
             }
 
@@ -141,10 +186,10 @@ fun BasicTitleTextView(text: String) {
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
         color = Color.White,
         modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 0.dp),
-        fontSize = 24.sp,
+        fontSize = 16.sp,
         fontFamily = FontFamily(
             Font(
-                R.font.notosans_regular,
+                R.font.gmarket_sans_medium,
                 FontWeight.Normal,
                 FontStyle.Normal
             )
@@ -159,10 +204,10 @@ fun BasicInfoContentsTextView(text: String) {
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
         modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 0.dp),
         color = Color.White,
-        fontSize = 16.sp,
+        fontSize = 12.sp,
         fontFamily = FontFamily(
             Font(
-                R.font.notosans_regular,
+                R.font.gmarket_sans_medium,
                 FontWeight.Normal,
                 FontStyle.Normal
             )
@@ -202,15 +247,68 @@ fun BasicInfo(charInfo: CharacterVo) {
 
 
         BasicTitleTextView(text = "기본 스탯")
-        BasicInfoContentsTextView(text = "STR : ${charInfo.str}")
-        BasicInfoContentsTextView(text = "DEX : ${charInfo.dex}")
-        BasicInfoContentsTextView(text = "INT : ${charInfo.int}")
-        BasicInfoContentsTextView(text = "LUK : ${charInfo.luk}")
+        Row {
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "HP : ${charInfo.hp}")
+            }
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "MP : ${charInfo.mp}")
+            }
+            Spacer(modifier = Modifier.weight(1f))
+        }
 
-        BasicInfoContentsTextView(text = "스탯공격력 : ${charInfo.statAttPower[0]} ~ ${charInfo.statAttPower[1]}")
-        BasicInfoContentsTextView(text = "크리티컬 데미지 : ${charInfo.criticalDamage}")
-        BasicInfoContentsTextView(text = "보스공격력 : ${charInfo.boseOffensePower}")
-        BasicInfoContentsTextView(text = "방어율무시 : ${charInfo.ignoreDefense}")
+        Row {
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "STR : ${charInfo.str}")
+            }
+
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "DEX : ${charInfo.dex}")
+            }
+            Spacer(modifier = Modifier.weight(1f))
+
+        }
+
+        Row {
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "INT : ${charInfo.int}")
+            }
+
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "LUK : ${charInfo.luk}")
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+        BasicInfoContentsTextView(text = "스공 : ${charInfo.statAttPower[0]} ~ ${charInfo.statAttPower[1]}")
+
+        Row {
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "보공 : ${charInfo.boseOffensePower}")
+            }
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "데미지 : ${charInfo.boseOffensePower}")
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
+        }
+
+        Row {
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "방무 : ${charInfo.ignoreDefense}")
+            }
+            Row(modifier = Modifier.weight(1f)) {
+                BasicInfoContentsTextView(text = "크뎀 : ${charInfo.criticalDamage}")
+            }
+            Spacer(modifier = Modifier.weight(1f))
+
+        }
+
+
 
         Divider(
             modifier = Modifier
@@ -257,14 +355,14 @@ fun BasicInfo(charInfo: CharacterVo) {
 }
 
 @Composable
-fun EquipmentList(items: MutableList<ItemsVo>) {
+fun EquipmentList(items: MutableList<ItemsVo>, jobClass: String) {
 
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
     ) {
         items(items) {
-            Equipment(itemsVo = it)
+            Equipment(itemsVo = it, jobClass)
             Spacer(modifier = Modifier.height(8.dp))
         }
     }
@@ -272,7 +370,7 @@ fun EquipmentList(items: MutableList<ItemsVo>) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun Equipment(itemsVo: ItemsVo) {
+fun Equipment(itemsVo: ItemsVo, jobClass: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -295,6 +393,16 @@ fun Equipment(itemsVo: ItemsVo) {
                 BasicEquipmentTextview(text = itemsVo.name)
                 Spacer(modifier = Modifier.width(6.dp))
                 BasicEquipmentTextview(text = itemsVo.starforce.replace(" 강화", ""))
+
+                Spacer(modifier = Modifier.width(4.dp))
+                if (!emptyAddOption.contains(itemsVo.itemType)) {
+                    BasicEquipmentTextview(
+                        text = AddOptionCalculator().calculateAddOption(
+                            itemsVo,
+                            jobClass.split("/")[1]
+                        ).toString() + "급"
+                    )
+                }
             }
 
             Column {

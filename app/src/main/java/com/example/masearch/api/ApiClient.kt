@@ -9,20 +9,25 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiClient {
     @Provides
-    fun provideBaseUrl() = Constant.BASE_URL
+    fun provideBaseUrl() = Constant.TEST_URL
 
     @Singleton
     @Provides
     fun provideOkHttpClient() = if (BuildConfig.DEBUG) {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+        OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .writeTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor).build()
     } else {
         OkHttpClient.Builder().build()
     }

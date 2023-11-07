@@ -29,10 +29,7 @@ fun Navigation(viewModel: MainViewModel, activity: MainActivity) {
         ) {
             ParallaxEffect(
                 navigateBack = {
-                    navController.popBackStack(
-                        route = Screen.MainScreen.route,
-                        inclusive = false
-                    )
+                    navController.popBackStack()
                 },
                 id = it.arguments?.getString("searchId", ""),
                 viewModel = viewModel,

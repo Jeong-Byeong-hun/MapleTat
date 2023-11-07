@@ -55,16 +55,21 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainView(navController: NavController) {
-    
+
     var id by remember { mutableStateOf(TextFieldValue("")) }
-    
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Screen 1")
-        TextField(value = id, onValueChange = {s -> id = s }, placeholder = { Text(text = "아이디를 입력해주세요.")}, singleLine = true)
+        TextField(
+            value = id,
+            onValueChange = { s -> id = s },
+            placeholder = { Text(text = "아이디를 입력해주세요.") },
+            singleLine = true
+        )
         Button(onClick = { navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString())) }) {
             Text(text = "Navigate to next screen")
         }
@@ -89,9 +94,9 @@ fun ParallaxEffect(
     Log.d("TAG", "ParallaxEffect: ID " + id)
 
 
-        LaunchedEffect(key1 = Unit) {
-            viewModel.getUserData(receivedText!!)
-        }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getUserData(receivedText!!)
+    }
 
     Box {
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
@@ -118,14 +123,16 @@ fun ParallaxEffect(
                         .background(Color.DarkGray)
                 ) {
 
-                    GlideImage(model = activity.getDrawable(R.mipmap.perv_btn),
+                    GlideImage(
+                        model = activity.getDrawable(R.mipmap.perv_btn),
                         contentDescription = "back",
                         modifier = Modifier
                             .height(40.dp)
                             .width(40.dp)
                             .clickable(onClick = navigateBack)
                             .align(Alignment.CenterVertically)
-                            .padding(12.dp))
+                            .padding(12.dp)
+                    )
 
                     Spacer(
                         modifier = Modifier.width(4.dp)
@@ -138,19 +145,6 @@ fun ParallaxEffect(
                         .align(Alignment.CenterVertically)
 
                     ToolbarNickName(textModifier, viewModel)
-
-                    Text(
-                        text = id.toString(),
-                        textAlign = TextAlign.Center,
-                        fontSize = 16.sp,
-                        color = Color.White,
-                        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
-                        fontFamily = FontFamily(
-                            Font(
-                                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
-                            )
-                        )
-                    )
 
                     Spacer(
                         modifier = Modifier.weight(1f)

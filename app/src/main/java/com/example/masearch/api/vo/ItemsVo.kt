@@ -39,11 +39,15 @@ data class ItemsVo(
     @SerializedName("마력")
     val spellPower: MutableList<String>,
 
+    @SerializedName("올스탯")
+    val AllStat: MutableList<String>,
+
+
     @SerializedName("몬스터 방어력 무시")
     val ignoreDefense: MutableList<String>,
 
     @SerializedName("가위 사용 가능 횟수")
-    val remainScissors : String,
+    val remainScissors: String,
 
     @SerializedName("잠재옵션")
     val potential: Potential,
