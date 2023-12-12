@@ -3,11 +3,13 @@
 
 
 
-12월에 나오는 API로 교체해야함 
+12월에(예정) 나오는 API로 교체해야함 
 
 
 
 현재 사용 불가
+개인으로 쓰고 싶다면 여기서 https://github.com/leesangb/mapleutils-parser-js 해당 프로젝트를 clone해서 사용하면 가능하다
+현재 대부분의 메이플 캐릭터 검색(장착한 아이템을 보여주는 곳은 크롤링 방식)은 자주하면 밴을 먹기때문에 공식 API가 나오면 하는 걸 추천합니다. (시간지나면 풀림)
 
 
 
@@ -16,7 +18,7 @@
 Compose 
 
 
-Glide
+Glide(Compose)
 
 
 Hilt 
@@ -26,6 +28,9 @@ Retrofit2
 
 
 Compose Navigation 
+
+
+Room
 
 
 
