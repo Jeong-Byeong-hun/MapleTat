@@ -33,7 +33,6 @@ fun Navigation(viewModel: MainViewModel, activity: MainActivity) {
                 },
                 id = it.arguments?.getString("searchId", ""),
                 viewModel = viewModel,
-                activity = activity
             )
         }
 

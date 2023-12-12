@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -42,11 +43,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.mainui.SearchDialog
 import com.example.masearch.screen.Screen
+import kotlinx.coroutines.currentCoroutineContext
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -82,14 +85,13 @@ fun MainView(navController: NavController) {
 fun ParallaxEffect(
     navigateBack: () -> Unit,
     id: String?,
-    viewModel: MainViewModel,
-    activity: MainActivity
+    viewModel: MainViewModel
 ) {
     val state = rememberCollapsingToolbarScaffoldState()
     var showDialog by remember { mutableStateOf(false) }
     var receivedText by remember { mutableStateOf(id) }
     var enabled by remember { mutableStateOf(true) }
-
+    val context = LocalContext.current
     Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
     Log.d("TAG", "ParallaxEffect: ID " + id)
 
@@ -124,7 +126,7 @@ fun ParallaxEffect(
                 ) {
 
                     GlideImage(
-                        model = activity.getDrawable(R.mipmap.perv_btn),
+                        model = ContextCompat.getDrawable(context , R.mipmap.perv_btn),
                         contentDescription = "back",
                         modifier = Modifier
                             .height(40.dp)
@@ -150,7 +152,7 @@ fun ParallaxEffect(
                         modifier = Modifier.weight(1f)
                     )
 
-                    GlideImage(model = activity.getDrawable(R.mipmap.search),
+                    GlideImage(model = ContextCompat.getDrawable(context , R.mipmap.search),
                         contentDescription = "search",
                         modifier = Modifier
                             .height(40.dp)
