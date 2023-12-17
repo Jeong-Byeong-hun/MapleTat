@@ -1,4 +1,4 @@
-package com.example.masearch
+package com.example.masearch.mainui
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -40,16 +40,16 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.masearch.mainui.SearchDialog
+import com.example.masearch.MainViewModel
+import com.example.masearch.R
+import com.example.masearch.Stats
 import com.example.masearch.screen.Screen
-import kotlinx.coroutines.currentCoroutineContext
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState

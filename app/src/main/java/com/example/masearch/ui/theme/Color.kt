@@ -22,3 +22,5 @@ val LegendaryTextColor = Color(0xFF00F20A)
 val UniqueTextColor = Color(0xFFFAFF00)
 val EpicTextColor = Color(0xFF6C00F4)
 val RareTextColor = Color(0xFF77B6D6)
+
+val LikeBackGroundColor = Color(0xFFE46C23)

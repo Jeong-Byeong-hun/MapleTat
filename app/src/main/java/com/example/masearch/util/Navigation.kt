@@ -6,14 +6,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.masearch.MainActivity
-import com.example.masearch.MainView
+import com.example.masearch.mainui.MainView
 import com.example.masearch.MainViewModel
-import com.example.masearch.ParallaxEffect
+import com.example.masearch.mainui.ParallaxEffect
 import com.example.masearch.screen.Screen
 
 @Composable
-fun Navigation(viewModel: MainViewModel, activity: MainActivity) {
+fun Navigation(viewModel: MainViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
