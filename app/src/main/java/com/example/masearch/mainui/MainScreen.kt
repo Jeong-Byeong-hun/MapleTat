@@ -49,6 +49,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.MainViewModel
 import com.example.masearch.R
 import com.example.masearch.Stats
+import com.example.masearch.api.vo.BaseVo
 import com.example.masearch.screen.Screen
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -89,16 +90,23 @@ fun ParallaxEffect(
 ) {
     val state = rememberCollapsingToolbarScaffoldState()
     var showDialog by remember { mutableStateOf(false) }
-    var receivedText by remember { mutableStateOf(id) }
+    var receivedText by remember { mutableStateOf(id.orEmpty()) }
     var enabled by remember { mutableStateOf(true) }
     val context = LocalContext.current
     Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
     Log.d("TAG", "ParallaxEffect: ID " + id)
 
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getUserData(receivedText!!)
+    LaunchedEffect(key1 = receivedText) {
+        receivedText.let {
+            if (receivedText.isNotEmpty()) {
+                viewModel.getUserData(it)
+            }
+
+        }
     }
+
+    val userData by viewModel.userData.observeAsState()
 
     Box {
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
@@ -126,7 +134,7 @@ fun ParallaxEffect(
                 ) {
 
                     GlideImage(
-                        model = ContextCompat.getDrawable(context , R.mipmap.perv_btn),
+                        model = ContextCompat.getDrawable(context, R.mipmap.perv_btn),
                         contentDescription = "back",
                         modifier = Modifier
                             .height(40.dp)
@@ -146,13 +154,13 @@ fun ParallaxEffect(
                         }
                         .align(Alignment.CenterVertically)
 
-                    ToolbarNickName(textModifier, viewModel)
+                    ToolbarNickName(modifier = textModifier, userData = userData)
 
                     Spacer(
                         modifier = Modifier.weight(1f)
                     )
 
-                    GlideImage(model = ContextCompat.getDrawable(context , R.mipmap.search),
+                    GlideImage(model = ContextCompat.getDrawable(context, R.mipmap.search),
                         contentDescription = "search",
                         modifier = Modifier
                             .height(40.dp)
@@ -186,7 +194,7 @@ fun ParallaxEffect(
                         alpha = (state.toolbarState.progress)
                     }
 
-                ToolbarView(viewModel = viewModel, glideModifier = glideModifier)
+                ToolbarView(userData = userData, glideModifier = glideModifier)
 
             }) {
             Column(
@@ -194,26 +202,32 @@ fun ParallaxEffect(
                     .fillMaxSize()
                     .background(Color.DarkGray)
             ) {
-                MainAvatar(viewModel = viewModel)
+                MainAvatar(userData = userData)
             }
 
-
         }
+
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(Color.DarkGray)
+//        ) {
+//            MainAvatar(userData = userData)
+//        }
 
     }
 }
 
 @Composable
-fun ToolbarNickName(modifier: Modifier, viewModel: MainViewModel) {
-    val temp = viewModel.getData().observeAsState()
+fun ToolbarNickName(modifier: Modifier, userData: BaseVo?) {
 
-    if (temp.value != null) {
-        if (temp.value?.characterVo == null) {
+    if (userData != null) {
+        if (userData.characterVo == null) {
             return
         }
 
         Text(
-            text = temp.value!!.characterVo.name,
+            text = userData.characterVo.name,
             modifier = modifier,
             textAlign = TextAlign.Center,
             fontSize = 16.sp,
@@ -248,50 +262,15 @@ fun CharacterInfoText(text: String) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
-    val temp = viewModel.getData().observeAsState()
-    val errorValue = viewModel.getErrorLiveData().observeAsState()
+fun ToolbarView(userData: BaseVo?, glideModifier: Modifier) {
 
-    var text = "아이디 또는 핸즈가 열려 있는지 확인해 주세요."
-//        val snackState = remember { SnackbarHostState() }
-//        val snackScope = rememberCoroutineScope()
-
-
-//        SnackbarHost(
-//            hostState = snackState,
-//            Modifier
-//                .fillMaxWidth()
-//                .padding(4.dp)
-//        )
-//
-//
-//
-//        fun launchSnackBar() {
-//            snackScope.launch {
-//                snackState.showSnackbar(
-//                    text
-//                )
-//            }
-//        }
-
-    if (errorValue.value?.isNotEmpty() == true) {
-        Log.d("MainViewModel", "ToolbarView: 에러에러")
-        Log.d("MainViewModel", "ToolbarView: " + temp.value.toString())
-//            launchSnackBar()
-        viewModel.clearErrorData()
-    }
-
-    if (temp.value != null) {
-        if (temp.value?.characterVo == null) {
-            return
-        }
-
+    if (userData != null) {
         Box(
             contentAlignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth()
         ) {
 
             GlideImage(
-                model = temp.value!!.characterVo.image,
+                model = userData.characterVo.image,
                 contentDescription = "avatar",
                 modifier = glideModifier
             )
@@ -315,7 +294,7 @@ fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
                     verticalAlignment = Alignment.Top
                 ) {
 
-                    CharacterInfoText(text = temp.value!!.characterVo.level)
+                    CharacterInfoText(text = userData.characterVo.level)
                     Spacer(modifier = Modifier.width(8.dp))
                     Divider(
                         modifier = Modifier
@@ -324,7 +303,7 @@ fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
                             .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    CharacterInfoText(text = temp.value!!.characterVo.world)
+                    CharacterInfoText(text = userData.characterVo.world)
 
                     Spacer(modifier = Modifier.width(8.dp))
                     Divider(
@@ -336,8 +315,8 @@ fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
                     Spacer(modifier = Modifier.width(8.dp))
 
                     CharacterInfoText(
-                        text = temp.value!!.characterVo.name + "  " + temp.value!!.characterVo.role.substring(
-                            temp.value!!.characterVo.role.indexOf("/") + 1
+                        text = userData.characterVo.name + "  " + userData.characterVo.role.substring(
+                            userData.characterVo.role.indexOf("/") + 1
                         )
                     )
 
@@ -352,12 +331,11 @@ fun ToolbarView(viewModel: MainViewModel, glideModifier: Modifier) {
 
 
 @Composable
-fun MainAvatar(viewModel: MainViewModel) {
-    val temp = viewModel.getData().observeAsState()
+fun MainAvatar(userData: BaseVo?) {
 
-    if (temp.value != null) {
-        if (temp.value?.characterVo == null) return
+    if (userData != null) {
+        if (userData.characterVo == null) return
 
-        Stats(charInfo = temp.value!!.characterVo, items = temp.value!!.items)
+        Stats(charInfo = userData.characterVo, items = userData.items)
     }
 }

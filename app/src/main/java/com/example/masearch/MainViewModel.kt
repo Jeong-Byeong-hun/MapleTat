@@ -1,6 +1,7 @@
 package com.example.masearch
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,39 +11,52 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class MainViewModel @Inject constructor(private val characterSearch: CharacterSearch) :
-    ViewModel() {
-    private var baseInfo: MutableLiveData<BaseVo> = MutableLiveData()
-    private var errorLiveData: MutableLiveData<String> = MutableLiveData()
-    fun getData() = baseInfo
+class UserRepository @Inject constructor(private val characterSearch: CharacterSearch) {
 
-    fun getErrorLiveData() = errorLiveData
+    suspend fun getUserData(id: String): BaseVo {
+        val userId = mutableMapOf<String, String>()
+        userId["ID"] = id
+
+        try {
+            val data = characterSearch.getCharacterInfo(userId)
+            if (data.body()?.data!!.items.isNotEmpty()) {
+                return data.body()!!.data
+            } else {
+                throw Exception("No data found.")
+            }
+        } catch (e: Exception) {
+            throw Exception("Error fetching user data: ${e.message}")
+        }
+    }
+}
+
+@HiltViewModel
+class MainViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
+//    private var baseInfo: MutableLiveData<BaseVo> = MutableLiveData()
+//    private var errorLiveData: MutableLiveData<String> = MutableLiveData()
+
+    private val _userData = MutableLiveData<BaseVo>()
+    val userData: LiveData<BaseVo> get() = _userData
+
+    private val _errorLiveData = MutableLiveData<String>()
+    val errorLiveData: LiveData<String> get() = _errorLiveData
+//    fun getData() = baseInfo
+
+//    fun getErrorLiveData() = errorLiveData
 
     fun clearErrorData() {
-        errorLiveData.value = null
+        _errorLiveData.value = null
     }
 
 
     fun getUserData(id: String) {
-        val userId = mutableMapOf<String, String>()
-        userId["ID"] = id
-
-        Log.d("MainViewModel", "getUserData: $userId")
-
         viewModelScope.launch {
             try {
-                val data = characterSearch.getCharacterInfo(userId)
-                Log.d("MainViewModel", "getUserData: " + data.body().toString())
-                Log.d("MainViewModel", "getUserData: " + data.body()?.data!!.characterVo)
-                if (data.body()?.data!!.items.isNotEmpty()) {
-                    baseInfo.postValue(data.body()!!.data)
-                    errorLiveData.postValue("")
-                } else {
-                    throw Exception()
-                }
+                val result = userRepository.getUserData(id)
+                _userData.value = result
+                _errorLiveData.value = ""
             } catch (e: Exception) {
-                errorLiveData.postValue("아이디를 다시 한 번 확인해주시거나 핸즈가 열려있는지 확인해주세요.")
+                _errorLiveData.value = "아이디를 다시 한 번 확인해주시거나 핸즈가 열려있는지 확인해주세요."
                 Log.d("MainViewModel", "getUserData: 검색결과가 없습니다..")
             }
 
