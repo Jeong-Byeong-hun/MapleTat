@@ -15,9 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -40,6 +44,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -51,9 +56,15 @@ import com.example.masearch.R
 import com.example.masearch.Stats
 import com.example.masearch.api.vo.BaseVo
 import com.example.masearch.screen.Screen
+import com.example.masearch.ui.theme.AbilityBackgroundColor
+import com.example.masearch.ui.theme.CombatPowerBackground
+import com.example.masearch.ui.theme.CombatPowerBackgroundColor
+import com.example.masearch.ui.theme.CombatPowerTextColor
+import com.example.masearch.ui.theme.MaSearchTheme
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
+import kotlin.math.round
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -249,7 +260,7 @@ fun CharacterInfoText(text: String) {
     Text(
         text = text,
         textAlign = TextAlign.Center,
-        fontSize = 16.sp,
+        fontSize = 12.sp,
         color = Color.White,
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
         fontFamily = FontFamily(
@@ -329,7 +340,6 @@ fun ToolbarView(userData: BaseVo?, glideModifier: Modifier) {
     }
 }
 
-
 @Composable
 fun MainAvatar(userData: BaseVo?) {
 
@@ -337,5 +347,185 @@ fun MainAvatar(userData: BaseVo?) {
         if (userData.characterVo == null) return
 
         Stats(charInfo = userData.characterVo, items = userData.items)
+    }
+}
+
+
+@Preview
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun previewToolbarView(){
+    MaSearchTheme {
+        PToolbarView()
+    }
+}
+
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun PToolbarView( ) {
+    val context = LocalContext.current
+        Column(
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(Color.DarkGray)
+        ) {
+
+            GlideImage(
+                model = ContextCompat.getDrawable(context, R.mipmap.temp_char_img),
+                contentDescription = "avatar",
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(100.dp)
+            )
+
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Spacer(
+                    modifier = Modifier.height(16.dp)
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    CharacterInfoText(text = "Lv.278")
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Divider(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                            .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    CharacterInfoText(text = "xzI존토벤x")
+
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Divider(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                            .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    CharacterInfoText(
+                        text = "아크메이지(썬,콜)"
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
+                    GlideImage(
+                        model = ContextCompat.getDrawable(context, R.mipmap.temp_server_icon),
+                        contentDescription = "server",
+                        modifier = Modifier
+                            .width(14.dp)
+                            .height(14.dp)
+                    )
+
+                }
+                Spacer(
+                    modifier = Modifier.height(4.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            CombatPower()
+        }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun CombatPower(){
+    val context = LocalContext.current
+    Surface(
+        color = CombatPowerBackgroundColor,
+        modifier = Modifier
+            .padding(40.dp, 0.dp, 40.dp, 0.dp)
+            .clip(shape = RoundedCornerShape(5.dp))) {
+        Row (modifier = Modifier
+            .fillMaxWidth()
+            .height(52.dp)
+            .padding(16.dp, 0.dp, 16.dp, 0.dp),
+            verticalAlignment = Alignment.CenterVertically){
+
+            CharacterInfoText(text = "전투력")
+            Spacer(modifier = Modifier.width(16.dp))
+            CombatPowerTextView()
+            Spacer(modifier = Modifier.width(16.dp))
+            GlideImage(model = ContextCompat.getDrawable(context, R.mipmap.ignore_shield)
+                , contentDescription = "ignore_shield",
+                modifier = Modifier
+                    .width(16.dp)
+                    .height(18.dp))
+            Spacer(modifier = Modifier.width(16.dp))
+            IgnoreShieldTextView()
+        }
+    }
+
+}
+
+@Preview
+@Composable
+fun previewCombatPower(){
+    CombatPower()
+}
+
+@Composable
+fun CombatPowerTextView(){
+    Text(
+        text = "1억 8999만 4852",
+        textAlign = TextAlign.Center,
+        fontSize = 12.sp,
+        color = CombatPowerTextColor,
+        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+        fontFamily = FontFamily(
+            Font(
+                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+            )
+        )
+    )
+}
+
+@Composable
+fun IgnoreShieldTextView(){
+    Text(
+        text = "90.61%",
+        textAlign = TextAlign.Center,
+        fontSize = 12.sp,
+        color = Color.White,
+        style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+        fontFamily = FontFamily(
+            Font(
+                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+            )
+        )
+    )
+}
+
+
+@Composable
+fun AbilityStatView(){
+    Surface(color = AbilityBackgroundColor,
+        shape = RoundedCornerShape(5.dp)) {
+        LazyColumn(content = )
+    }
+}
+
+@Composable
+fun AbilityStatTextView(statType : String, num: String){
+    Row {
+        Text(text = "$statType :")
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = num)
     }
 }

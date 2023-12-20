@@ -23,4 +23,9 @@ val UniqueTextColor = Color(0xFFFAFF00)
 val EpicTextColor = Color(0xFF6C00F4)
 val RareTextColor = Color(0xFF77B6D6)
 
-val LikeBackGroundColor = Color(0xFFE46C23)
+val LikeBackgroundColor = Color(0xFFE46C23)
+val CombatPowerBackgroundColor = Color(0xFF495359)
+val CombatPowerTextColor = Color(0xFFEBED7C)
+
+val AbilityBackgroundColor = Color(0xCC317094)
+val SpecialDamageBackgroundColor = Color(0xCC45504C)
