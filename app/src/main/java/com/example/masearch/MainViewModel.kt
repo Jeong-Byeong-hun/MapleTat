@@ -19,7 +19,7 @@ class UserRepository @Inject constructor(private val characterSearch: CharacterS
 
         try {
             val data = characterSearch.getCharacterInfo(userId)
-            if (data.body()?.data!!.items.isNotEmpty()) {
+            if (data.body()?.data != null) {
                 return data.body()!!.data
             } else {
                 throw Exception("No data found.")

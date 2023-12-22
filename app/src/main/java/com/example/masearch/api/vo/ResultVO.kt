@@ -16,7 +16,8 @@ data class ResultVO(
     val ability: AbilityVO,
 
     @SerializedName("item-equipment")
-    val itemEquipment : ItemEquipmentVO
+    val itemEquipment : ItemEquipmentVO,
 
-
+    @SerializedName("dojang")
+    val dojang: DojangVO
 )

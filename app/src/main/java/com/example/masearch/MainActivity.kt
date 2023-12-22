@@ -25,9 +25,9 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaSearchTheme {
-                Navigation(viewModel)
-//                LikeCharacterHolder()
-//                previewLikeCharacter()
+//                Navigation(viewModel)
+//                LikeCharacterHolder(10)
+                previewLikeCharacter()
 //                PToolbarView()
 
             }

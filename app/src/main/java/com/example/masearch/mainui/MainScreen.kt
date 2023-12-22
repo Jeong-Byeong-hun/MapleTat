@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -57,14 +56,12 @@ import com.example.masearch.Stats
 import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.screen.Screen
 import com.example.masearch.ui.theme.AbilityBackgroundColor
-import com.example.masearch.ui.theme.CombatPowerBackground
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
 import com.example.masearch.ui.theme.MaSearchTheme
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
-import kotlin.math.round
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -165,7 +162,7 @@ fun ParallaxEffect(
                         }
                         .align(Alignment.CenterVertically)
 
-                    ToolbarNickName(modifier = textModifier, userData = userData)
+//                    ToolbarNickName(modifier = textModifier, userData = userData)
 
                     Spacer(
                         modifier = Modifier.weight(1f)
@@ -205,7 +202,7 @@ fun ParallaxEffect(
                         alpha = (state.toolbarState.progress)
                     }
 
-                ToolbarView(userData = userData, glideModifier = glideModifier)
+//                ToolbarView(userData = userData, glideModifier = glideModifier)
 
             }) {
             Column(
@@ -229,31 +226,31 @@ fun ParallaxEffect(
     }
 }
 
-@Composable
-fun ToolbarNickName(modifier: Modifier, userData: ResultVO?) {
-
-    if (userData != null) {
-        if (userData.characterVo == null) {
-            return
-        }
-
-        Text(
-            text = userData.characterVo.name,
-            modifier = modifier,
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp,
-            color = Color.White,
-            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
-            fontFamily = FontFamily(
-                Font(
-                    R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
-                )
-            )
-        )
-
-    }
-
-}
+//@Composable
+//fun ToolbarNickName(modifier: Modifier, userData: ResultVO?) {
+//
+//    if (userData != null) {
+//        if (userData.characterVo == null) {
+//            return
+//        }
+//
+//        Text(
+//            text = userData.characterVo.name,
+//            modifier = modifier,
+//            textAlign = TextAlign.Center,
+//            fontSize = 16.sp,
+//            color = Color.White,
+//            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+//            fontFamily = FontFamily(
+//                Font(
+//                    R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+//                )
+//            )
+//        )
+//
+//    }
+//
+//}
 
 @Composable
 fun CharacterInfoText(text: String) {
@@ -271,82 +268,82 @@ fun CharacterInfoText(text: String) {
     )
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
-
-    if (userData != null) {
-        Box(
-            contentAlignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth()
-        ) {
-
-            GlideImage(
-                model = userData.characterVo.image,
-                contentDescription = "avatar",
-                modifier = glideModifier
-            )
-
-            Column(
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-
-            ) {
-                Spacer(
-                    modifier = Modifier.height(130.dp)
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Min),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.Top
-                ) {
-
-                    CharacterInfoText(text = userData.characterVo.level)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Divider(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
-                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    CharacterInfoText(text = userData.characterVo.world)
-
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Divider(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
-                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    CharacterInfoText(
-                        text = userData.characterVo.name + "  " + userData.characterVo.role.substring(
-                            userData.characterVo.role.indexOf("/") + 1
-                        )
-                    )
-
-                }
-                Spacer(
-                    modifier = Modifier.height(8.dp)
-                )
-            }
-        }
-    }
-}
+//@OptIn(ExperimentalGlideComposeApi::class)
+//@Composable
+//fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
+//
+//    if (userData != null) {
+//        Box(
+//            contentAlignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth()
+//        ) {
+//
+//            GlideImage(
+//                model = userData.characterVo.image,
+//                contentDescription = "avatar",
+//                modifier = glideModifier
+//            )
+//
+//            Column(
+//                verticalArrangement = Arrangement.Top,
+//                horizontalAlignment = Alignment.CenterHorizontally,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .fillMaxHeight()
+//
+//            ) {
+//                Spacer(
+//                    modifier = Modifier.height(130.dp)
+//                )
+//                Row(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(IntrinsicSize.Min),
+//                    horizontalArrangement = Arrangement.Center,
+//                    verticalAlignment = Alignment.Top
+//                ) {
+//
+//                    CharacterInfoText(text = userData.characterVo.level)
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    Divider(
+//                        modifier = Modifier
+//                            .width(1.dp)
+//                            .fillMaxHeight()
+//                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
+//                    )
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    CharacterInfoText(text = userData.characterVo.world)
+//
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    Divider(
+//                        modifier = Modifier
+//                            .width(1.dp)
+//                            .fillMaxHeight()
+//                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
+//                    )
+//                    Spacer(modifier = Modifier.width(8.dp))
+//
+//                    CharacterInfoText(
+//                        text = userData.characterVo.name + "  " + userData.characterVo.role.substring(
+//                            userData.characterVo.role.indexOf("/") + 1
+//                        )
+//                    )
+//
+//                }
+//                Spacer(
+//                    modifier = Modifier.height(8.dp)
+//                )
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun MainAvatar(userData: ResultVO?) {
 
     if (userData != null) {
-        if (userData.characterVo == null) return
+        if (userData.stat == null) return
 
-        Stats(charInfo = userData.characterVo, items = userData.items)
+        Stats(charInfo = userData.stat, items = userData.itemEquipment)
     }
 }
 
@@ -354,7 +351,7 @@ fun MainAvatar(userData: ResultVO?) {
 @Preview
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun previewToolbarView(){
+fun previewToolbarView() {
     MaSearchTheme {
         PToolbarView()
     }
@@ -363,110 +360,115 @@ fun previewToolbarView(){
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun PToolbarView( ) {
+fun PToolbarView() {
     val context = LocalContext.current
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .background(Color.DarkGray)
+    ) {
+
+        GlideImage(
+            model = ContextCompat.getDrawable(context, R.mipmap.temp_char_img),
+            contentDescription = "avatar",
+            modifier = Modifier
+                .width(120.dp)
+                .height(100.dp)
+        )
+
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
-                .background(Color.DarkGray)
         ) {
-
-            GlideImage(
-                model = ContextCompat.getDrawable(context, R.mipmap.temp_char_img),
-                contentDescription = "avatar",
-                modifier = Modifier
-                    .width(120.dp)
-                    .height(100.dp)
+            Spacer(
+                modifier = Modifier.height(16.dp)
             )
-
-            Column(
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(
-                    modifier = Modifier.height(16.dp)
-                )
-                Row(
+
+                CharacterInfoText(text = "Lv.278")
+                Spacer(modifier = Modifier.width(4.dp))
+                Divider(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Min),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    CharacterInfoText(text = "Lv.278")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Divider(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
-                            .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    CharacterInfoText(text = "xzI존토벤x")
-
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Divider(
-                        modifier = Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
-                            .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    CharacterInfoText(
-                        text = "아크메이지(썬,콜)"
-                    )
-
-                    Spacer(modifier = Modifier.width(4.dp))
-
-                    GlideImage(
-                        model = ContextCompat.getDrawable(context, R.mipmap.temp_server_icon),
-                        contentDescription = "server",
-                        modifier = Modifier
-                            .width(14.dp)
-                            .height(14.dp)
-                    )
-
-                }
-                Spacer(
-                    modifier = Modifier.height(4.dp)
+                        .width(1.dp)
+                        .fillMaxHeight()
+                        .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
                 )
+                Spacer(modifier = Modifier.width(4.dp))
+                CharacterInfoText(text = "xzI존토벤x")
+
+                Spacer(modifier = Modifier.width(4.dp))
+                Divider(
+                    modifier = Modifier
+                        .width(1.dp)
+                        .fillMaxHeight()
+                        .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+
+                CharacterInfoText(
+                    text = "아크메이지(썬,콜)"
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                GlideImage(
+                    model = ContextCompat.getDrawable(context, R.mipmap.temp_server_icon),
+                    contentDescription = "server",
+                    modifier = Modifier
+                        .width(14.dp)
+                        .height(14.dp)
+                )
+
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            CombatPower()
+            Spacer(
+                modifier = Modifier.height(4.dp)
+            )
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        CombatPower()
+    }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun CombatPower(){
+fun CombatPower() {
     val context = LocalContext.current
     Surface(
         color = CombatPowerBackgroundColor,
         modifier = Modifier
             .padding(40.dp, 0.dp, 40.dp, 0.dp)
-            .clip(shape = RoundedCornerShape(5.dp))) {
-        Row (modifier = Modifier
-            .fillMaxWidth()
-            .height(52.dp)
-            .padding(16.dp, 0.dp, 16.dp, 0.dp),
-            verticalAlignment = Alignment.CenterVertically){
+            .clip(shape = RoundedCornerShape(5.dp))
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp)
+                .padding(16.dp, 0.dp, 16.dp, 0.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
             CharacterInfoText(text = "전투력")
             Spacer(modifier = Modifier.width(16.dp))
             CombatPowerTextView()
             Spacer(modifier = Modifier.width(16.dp))
-            GlideImage(model = ContextCompat.getDrawable(context, R.mipmap.ignore_shield)
-                , contentDescription = "ignore_shield",
+            GlideImage(
+                model = ContextCompat.getDrawable(context, R.mipmap.ignore_shield),
+                contentDescription = "ignore_shield",
                 modifier = Modifier
                     .width(16.dp)
-                    .height(18.dp))
+                    .height(18.dp)
+            )
             Spacer(modifier = Modifier.width(16.dp))
             IgnoreShieldTextView()
         }
@@ -476,12 +478,12 @@ fun CombatPower(){
 
 @Preview
 @Composable
-fun previewCombatPower(){
+fun previewCombatPower() {
     CombatPower()
 }
 
 @Composable
-fun CombatPowerTextView(){
+fun CombatPowerTextView() {
     Text(
         text = "1억 8999만 4852",
         textAlign = TextAlign.Center,
@@ -497,7 +499,7 @@ fun CombatPowerTextView(){
 }
 
 @Composable
-fun IgnoreShieldTextView(){
+fun IgnoreShieldTextView() {
     Text(
         text = "90.61%",
         textAlign = TextAlign.Center,
@@ -514,15 +516,17 @@ fun IgnoreShieldTextView(){
 
 
 @Composable
-fun AbilityStatView(){
-    Surface(color = AbilityBackgroundColor,
-        shape = RoundedCornerShape(5.dp)) {
-        LazyColumn(content = )
+fun AbilityStatView() {
+    Surface(
+        color = AbilityBackgroundColor,
+        shape = RoundedCornerShape(5.dp)
+    ) {
+
     }
 }
 
 @Composable
-fun AbilityStatTextView(statType : String, num: String){
+fun AbilityStatTextView(statType: String, num: String) {
     Row {
         Text(text = "$statType :")
         Spacer(modifier = Modifier.weight(1f))

@@ -43,7 +43,7 @@ fun LikeCharacterHolder(index : Int) {
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             GlideImage(
-                model = ContextCompat.getDrawable(localContext, R.mipmap.temp_server_icon),
+                model = "https://open.api.nexon.com/static/maplestory/ItemIcon/KEPCJGME.png",
                 contentDescription = "serverIcon",
                 modifier = Modifier
                     .width(14.dp)
@@ -51,11 +51,11 @@ fun LikeCharacterHolder(index : Int) {
             )
 
             GlideImage(
-                model = ContextCompat.getDrawable(localContext, R.mipmap.temp_like_char),
+                model = "https://open.api.nexon.com/static/maplestory/Character/MBOPMFBPDMIMILJBMAINHCNCDBNHHJDJBBHNOLBJFHLKMLLLMBCIFOMGKFJPONMNOFKGKOGLMJGOCLDGALLKABBJLHEIDAGCGKCELMOMEDLDNMMADJOMCNFNJLHHJBFJPKFPHDNPHKBKFEHDGFILJPGKIJGIDMMDFBMANNBLHBGIEDMNFINPELOKKAGMPHLLEGNEHGEHHKLAAEIAEEFBDBCIOJNINMBCNOJCBJGFBDPCJDPAOAHHMLIKHNGOCKJJ.png",
                 contentDescription = "charImg",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1.0f)
+                    .weight(1f)
                     .align(Alignment.CenterHorizontally)
             )
 
@@ -78,7 +78,7 @@ fun previewLikeCharacter() {
     LazyVerticalGrid(columns = GridCells.Fixed(3),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(40.dp),
     ){
         items(10) {
             LikeCharacterHolder(it)
