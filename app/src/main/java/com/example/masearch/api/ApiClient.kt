@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiClient {
     @Provides
-    fun provideBaseUrl() = Constant.TEST_URL
+    fun provideBaseUrl() = Constant.BASE_URL
 
     @Singleton
     @Provides

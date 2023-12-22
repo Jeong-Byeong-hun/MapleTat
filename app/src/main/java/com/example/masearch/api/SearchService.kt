@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface SearchService {
-    @POST("/maple/getCharacter")
+    @POST("/maple/getInfo")
     suspend fun getCharacter(@Body id:Map<String,String>) : Response<BaseResult>
 }

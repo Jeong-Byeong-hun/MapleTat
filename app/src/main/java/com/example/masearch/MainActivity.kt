@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaSearchTheme {
                 Navigation(viewModel)
+                viewModel.getUserData("xzI존토벤x")
 //                LikeCharacterHolder()
 //                previewLikeCharacter()
 

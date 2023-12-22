@@ -6,14 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.masearch.api.CharacterSearch
-import com.example.masearch.api.vo.BaseVo
+import com.example.masearch.api.vo.ResultVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val characterSearch: CharacterSearch) {
 
-    suspend fun getUserData(id: String): BaseVo {
+    suspend fun getUserData(id: String): ResultVO {
         val userId = mutableMapOf<String, String>()
         userId["ID"] = id
 
@@ -35,8 +35,8 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
 //    private var baseInfo: MutableLiveData<BaseVo> = MutableLiveData()
 //    private var errorLiveData: MutableLiveData<String> = MutableLiveData()
 
-    private val _userData = MutableLiveData<BaseVo>()
-    val userData: LiveData<BaseVo> get() = _userData
+    private val _userData = MutableLiveData<ResultVO>()
+    val userData: LiveData<ResultVO> get() = _userData
 
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> get() = _errorLiveData

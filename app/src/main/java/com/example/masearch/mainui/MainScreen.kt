@@ -49,7 +49,7 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.MainViewModel
 import com.example.masearch.R
 import com.example.masearch.Stats
-import com.example.masearch.api.vo.BaseVo
+import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.screen.Screen
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -219,7 +219,7 @@ fun ParallaxEffect(
 }
 
 @Composable
-fun ToolbarNickName(modifier: Modifier, userData: BaseVo?) {
+fun ToolbarNickName(modifier: Modifier, userData: ResultVO?) {
 
     if (userData != null) {
         if (userData.characterVo == null) {
@@ -262,7 +262,7 @@ fun CharacterInfoText(text: String) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ToolbarView(userData: BaseVo?, glideModifier: Modifier) {
+fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
 
     if (userData != null) {
         Box(
@@ -331,7 +331,7 @@ fun ToolbarView(userData: BaseVo?, glideModifier: Modifier) {
 
 
 @Composable
-fun MainAvatar(userData: BaseVo?) {
+fun MainAvatar(userData: ResultVO?) {
 
     if (userData != null) {
         if (userData.characterVo == null) return
