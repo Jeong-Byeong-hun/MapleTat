@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +26,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.R
-import com.example.masearch.ui.theme.LikeBackGroundColor
+import com.example.masearch.ui.theme.LikeBackgroundColor
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -39,7 +38,7 @@ fun LikeCharacterHolder(index : Int) {
             .height(150.dp)
             .clickable {
                 Log.d("TAG", "LikeCharacterHolder: click $index")
-            }, color = LikeBackGroundColor,
+            }, color = LikeBackgroundColor,
         shape = RoundedCornerShape(5.dp)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {

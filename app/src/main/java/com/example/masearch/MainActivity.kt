@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.example.masearch.mainui.LikeCharacterHolder
+import com.example.masearch.mainui.PToolbarView
 import com.example.masearch.mainui.previewLikeCharacter
 import com.example.masearch.ui.theme.MaSearchTheme
 import com.example.masearch.util.Navigation
@@ -25,9 +26,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaSearchTheme {
                 Navigation(viewModel)
-                viewModel.getUserData("xzI존토벤x")
 //                LikeCharacterHolder()
 //                previewLikeCharacter()
+//                PToolbarView()
 
             }
         }
