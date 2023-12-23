@@ -31,7 +31,7 @@ import com.example.masearch.ui.theme.LikeBackgroundColor
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun LikeCharacterHolder(index : Int) {
-    val localContext = LocalContext.current
+
     Surface(
         modifier = Modifier
             .width(120.dp)

@@ -9,6 +9,7 @@ import com.example.masearch.api.CharacterSearch
 import com.example.masearch.api.vo.ResultVO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val characterSearch: CharacterSearch) {
@@ -19,8 +20,8 @@ class UserRepository @Inject constructor(private val characterSearch: CharacterS
 
         try {
             val data = characterSearch.getCharacterInfo(userId)
-            if (data.body()?.data != null) {
-                return data.body()!!.data
+            if (data.body() != null) {
+                return data.body()!!
             } else {
                 throw Exception("No data found.")
             }
@@ -53,11 +54,12 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
         viewModelScope.launch {
             try {
                 val result = userRepository.getUserData(id)
+                Timber.d(_userData.toString())
                 _userData.value = result
                 _errorLiveData.value = ""
             } catch (e: Exception) {
-                _errorLiveData.value = "아이디를 다시 한 번 확인해주시거나 핸즈가 열려있는지 확인해주세요."
-                Log.d("MainViewModel", "getUserData: 검색결과가 없습니다..")
+                _errorLiveData.value = "아이디를 다시 한 번 확인 해주세요."
+                e.printStackTrace()
             }
 
         }

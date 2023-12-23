@@ -7,12 +7,23 @@ data class HyperStatVO(
     val usePresetNum : String,
 
     @SerializedName("hyper_stat_preset_1")
-    val hyperStatFirst: List<List<String>>,
+    val hyperStatFirst: List<HyperStatDetail>,
 
     @SerializedName("hyper_stat_preset_2")
-    val hyperStatSecond: List<List<String>>,
+    val hyperStatSecond: List<HyperStatDetail>,
 
     @SerializedName("hyper_stat_preset_3")
-    val hyperStatThird: List<List<String>>,
+    val hyperStatThird: List<HyperStatDetail>,
+)
 
+
+data class HyperStatDetail(
+    @SerializedName("stat_type")
+    val statType: String,
+    @SerializedName("stat_point")
+    val statPoint: Int?,
+    @SerializedName("stat_level")
+    val statLevel: Int,
+    @SerializedName("stat_increase")
+    val statIncrease: String?
 )
