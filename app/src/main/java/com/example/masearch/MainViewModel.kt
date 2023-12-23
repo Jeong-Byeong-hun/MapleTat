@@ -16,7 +16,7 @@ class UserRepository @Inject constructor(private val characterSearch: CharacterS
 
     suspend fun getUserData(id: String): ResultVO {
         val userId = mutableMapOf<String, String>()
-        userId["ID"] = id
+        userId["ID"] = id.trim()
 
         try {
             val data = characterSearch.getCharacterInfo(userId)
@@ -33,18 +33,11 @@ class UserRepository @Inject constructor(private val characterSearch: CharacterS
 
 @HiltViewModel
 class MainViewModel @Inject constructor(private val userRepository: UserRepository) : ViewModel() {
-//    private var baseInfo: MutableLiveData<BaseVo> = MutableLiveData()
-//    private var errorLiveData: MutableLiveData<String> = MutableLiveData()
-
     private val _userData = MutableLiveData<ResultVO>()
     val userData: LiveData<ResultVO> get() = _userData
 
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> get() = _errorLiveData
-//    fun getData() = baseInfo
-
-//    fun getErrorLiveData() = errorLiveData
-
     fun clearErrorData() {
         _errorLiveData.value = null
     }

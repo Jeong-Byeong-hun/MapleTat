@@ -4,10 +4,15 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Divider
@@ -29,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.masearch.api.vo.ItemEquipmentVO
 import com.example.masearch.api.vo.StatVO
+import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.DividerColor
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -42,7 +48,7 @@ fun Stats(charInfo: StatVO, items: ItemEquipmentVO) {
 
     val tabData = listOf(
         "기본정보",
-        "장비템"
+        "장비 아이템"
     )
 
     val pagerState = rememberPagerState()
@@ -55,7 +61,7 @@ fun Stats(charInfo: StatVO, items: ItemEquipmentVO) {
             .background(Color.Transparent)
     ) {
         tabData.forEachIndexed() { index, text ->
-            Tab(modifier = Modifier.background(Color.DarkGray),
+            Tab(modifier = Modifier.background(CombatPowerBackgroundColor),
                 selected = tabIndex == index,
                 onClick = {
                     coroutineScope.launch {
@@ -174,9 +180,28 @@ fun BasicInfo(charInfo: StatVO) {
 
 
         BasicTitleTextView(text = "기본 스탯")
+        val basicStat = listOf<String>("HP", "MP", "STR", "DEX", "INT", "LUK")
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+        ) {
+            items(basicStat) { it ->
+                val foundStat =
+                    charInfo.finalStatList.find { finalStatVO -> finalStatVO.statName == it }
+                Log.d("TAG", "BasicInfo: " + foundStat)
+                if (foundStat != null) {
+                    val statValue = foundStat.statValue
+                    BasicInfoContentsTextView(text = "$it : $statValue")
+                }
+
+            }
+        }
+
 //        Row {
 //            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "HP : ${charInfo.finalStatList}")
+//                BasicInfoContentsTextView(text = "HP : ${charInfo.finalStatList.find { it.statName == "HP" }}")
 //            }
 //            Row(modifier = Modifier.weight(1f)) {
 //                BasicInfoContentsTextView(text = "MP : ${charInfo.mp}")

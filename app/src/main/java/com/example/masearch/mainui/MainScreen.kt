@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -19,6 +18,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -28,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +64,7 @@ import com.example.masearch.ui.theme.AbilityBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
 import com.example.masearch.ui.theme.MaSearchTheme
+import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -69,21 +75,50 @@ import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 fun MainView(navController: NavController) {
 
     var id by remember { mutableStateOf(TextFieldValue("")) }
+    val coroutineScope = rememberCoroutineScope()
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Screen 1")
-        TextField(
-            value = id,
-            onValueChange = { s -> id = s },
-            placeholder = { Text(text = "아이디를 입력해주세요.") },
-            singleLine = true
-        )
-        Button(onClick = { navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString())) }) {
-            Text(text = "Navigate to next screen")
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+    Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { it ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Screen 1")
+            TextField(
+                value = id,
+                onValueChange = { s -> id = s },
+                placeholder = { Text(text = "아이디를 입력해주세요.") },
+                singleLine = true
+            )
+
+            Button(onClick = {
+                if (id.text.isEmpty() && snackbarHostState.currentSnackbarData == null) {
+                    // 아이디가 비어 있고 스낵바가 표시 중이 아닌 경우에만 스낵바를 표시
+                    coroutineScope.launch() {
+                        snackbarHostState.showSnackbar(
+                            message = "아이디를 입력해주세요.",
+                            actionLabel = "닫기",
+                            duration = SnackbarDuration.Short
+                        ).let {
+                            when (it) {
+                                SnackbarResult.ActionPerformed -> Log.d("TAG", "MainView: 스낵바 확인")
+                                SnackbarResult.Dismissed -> Log.d("TAG", "MainView: 스낵바 닫기")
+                            }
+                        }
+                    }
+
+                } else if (id.text.isNotEmpty()) {
+                    // 아이디가 비어 있지 않으면 다음 화면으로 이동
+                    navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString()))
+                }
+            }) {
+                Text(text = "Navigate to next screen")
+            }
         }
     }
 }
@@ -102,8 +137,6 @@ fun ParallaxEffect(
     var enabled by remember { mutableStateOf(true) }
     val context = LocalContext.current
     Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
-    Log.d("TAG", "ParallaxEffect: ID " + id)
-
 
     LaunchedEffect(key1 = receivedText) {
         receivedText.let {
@@ -116,7 +149,7 @@ fun ParallaxEffect(
 
     val userData by viewModel.userData.observeAsState()
 
-    Box {
+    Column {
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
             state = state,
             scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
@@ -162,7 +195,7 @@ fun ParallaxEffect(
                         }
                         .align(Alignment.CenterVertically)
 
-//                    ToolbarNickName(modifier = textModifier, userData = userData)
+                    ToolbarNickName(modifier = textModifier, userData = userData)
 
                     Spacer(
                         modifier = Modifier.weight(1f)
@@ -196,13 +229,13 @@ fun ParallaxEffect(
                 }
 
                 val glideModifier = Modifier
-                    .width(150.dp)
-                    .height(150.dp)
+                    .width(100.dp)
+                    .height(100.dp)
                     .graphicsLayer {
-                        alpha = (state.toolbarState.progress)
+                        alpha = (state.toolbarState.progress).coerceIn(0f, 1f)
                     }
 
-//                ToolbarView(userData = userData, glideModifier = glideModifier)
+                ToolbarView(userData = userData, glideModifier = glideModifier)
 
             }) {
             Column(
@@ -226,31 +259,31 @@ fun ParallaxEffect(
     }
 }
 
-//@Composable
-//fun ToolbarNickName(modifier: Modifier, userData: ResultVO?) {
-//
-//    if (userData != null) {
-//        if (userData.characterVo == null) {
-//            return
-//        }
-//
-//        Text(
-//            text = userData.characterVo.name,
-//            modifier = modifier,
-//            textAlign = TextAlign.Center,
-//            fontSize = 16.sp,
-//            color = Color.White,
-//            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
-//            fontFamily = FontFamily(
-//                Font(
-//                    R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
-//                )
-//            )
-//        )
-//
-//    }
-//
-//}
+@Composable
+fun ToolbarNickName(modifier: Modifier, userData: ResultVO?) {
+
+    if (userData != null) {
+        if (userData.basic == null) {
+            return
+        }
+
+        Text(
+            text = userData.basic.charName,
+            modifier = modifier,
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp,
+            color = Color.White,
+            style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+            fontFamily = FontFamily(
+                Font(
+                    R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+                )
+            )
+        )
+
+    }
+
+}
 
 @Composable
 fun CharacterInfoText(text: String) {
@@ -268,74 +301,77 @@ fun CharacterInfoText(text: String) {
     )
 }
 
-//@OptIn(ExperimentalGlideComposeApi::class)
-//@Composable
-//fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
-//
-//    if (userData != null) {
-//        Box(
-//            contentAlignment = Alignment.TopCenter, modifier = Modifier.fillMaxWidth()
-//        ) {
-//
-//            GlideImage(
-//                model = userData.characterVo.image,
-//                contentDescription = "avatar",
-//                modifier = glideModifier
-//            )
-//
-//            Column(
-//                verticalArrangement = Arrangement.Top,
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .fillMaxHeight()
-//
-//            ) {
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
+
+    if (userData != null) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                GlideImage(
+                    model = userData.basic.charImage,
+                    contentDescription = "avatar",
+                    modifier = glideModifier,
+                    alignment = Alignment.TopCenter
+                )
+            }
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+
+            ) {
 //                Spacer(
-//                    modifier = Modifier.height(130.dp)
+//                    modifier = Modifier.height(20.dp)
 //                )
-//                Row(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .height(IntrinsicSize.Min),
-//                    horizontalArrangement = Arrangement.Center,
-//                    verticalAlignment = Alignment.Top
-//                ) {
-//
-//                    CharacterInfoText(text = userData.characterVo.level)
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    Divider(
-//                        modifier = Modifier
-//                            .width(1.dp)
-//                            .fillMaxHeight()
-//                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
-//                    )
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    CharacterInfoText(text = userData.characterVo.world)
-//
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    Divider(
-//                        modifier = Modifier
-//                            .width(1.dp)
-//                            .fillMaxHeight()
-//                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
-//                    )
-//                    Spacer(modifier = Modifier.width(8.dp))
-//
-//                    CharacterInfoText(
-//                        text = userData.characterVo.name + "  " + userData.characterVo.role.substring(
-//                            userData.characterVo.role.indexOf("/") + 1
-//                        )
-//                    )
-//
-//                }
-//                Spacer(
-//                    modifier = Modifier.height(8.dp)
-//                )
-//            }
-//        }
-//    }
-//}
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Top
+                ) {
+
+                    CharacterInfoText(text = "Lv. " + userData.basic.level)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Divider(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    CharacterInfoText(text = userData.basic.worldName)
+
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Divider(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .fillMaxHeight()
+                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+
+                    CharacterInfoText(
+                        text = userData.basic.charName + "  " + userData.basic.charClass
+                    )
+
+                }
+                Spacer(
+                    modifier = Modifier.height(8.dp)
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun MainAvatar(userData: ResultVO?) {

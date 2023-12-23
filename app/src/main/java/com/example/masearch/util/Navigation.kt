@@ -10,6 +10,7 @@ import com.example.masearch.mainui.MainView
 import com.example.masearch.MainViewModel
 import com.example.masearch.mainui.ParallaxEffect
 import com.example.masearch.screen.Screen
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun Navigation(viewModel: MainViewModel) {

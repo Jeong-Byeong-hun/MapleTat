@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.masearch.mainui.LikeCharacterHolder
 import com.example.masearch.mainui.PToolbarView
 import com.example.masearch.mainui.previewLikeCharacter
