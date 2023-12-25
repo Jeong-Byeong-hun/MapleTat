@@ -27,5 +27,5 @@ val LikeBackgroundColor = Color(0xFFE46C23)
 val CombatPowerBackgroundColor = Color(0xFF495359)
 val CombatPowerTextColor = Color(0xFFEBED7C)
 
-val AbilityBackgroundColor = Color(0xCC317094)
+val StatBackgroundColor = Color(0xCC317094)
 val SpecialDamageBackgroundColor = Color(0xCC45504C)

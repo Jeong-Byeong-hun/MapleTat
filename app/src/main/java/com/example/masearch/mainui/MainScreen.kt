@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -58,12 +60,16 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.example.masearch.MainViewModel
 import com.example.masearch.R
 import com.example.masearch.Stats
+import com.example.masearch.api.vo.FinalStatVO
 import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.screen.Screen
-import com.example.masearch.ui.theme.AbilityBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
 import com.example.masearch.ui.theme.MaSearchTheme
+import com.example.masearch.ui.theme.MainBackgroundColor
+import com.example.masearch.ui.theme.StatBackgroundColor
+import com.example.masearch.util.addCommas
+import com.example.masearch.util.convertToCombatPower
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
@@ -153,25 +159,20 @@ fun ParallaxEffect(
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
             state = state,
             scrollStrategy = ScrollStrategy.ExitUntilCollapsed,
-            toolbarModifier = Modifier.background(Color.DarkGray),
+            toolbarModifier = Modifier.background(MainBackgroundColor),
             enabled = enabled,
             toolbar = {
-                // Collapsing toolbar collapses its size as small as the that of
-                // a smallest child. To make the toolbar collapse to 50dp, we create
-                // a dummy Spacer composable.
-                // You may replace it with TopAppBar or other preferred composable.
-
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(150.dp)
+                        .height(200.dp)
                 )
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
-                        .background(Color.DarkGray)
+                        .background(MainBackgroundColor)
                 ) {
 
                     GlideImage(
@@ -241,7 +242,7 @@ fun ParallaxEffect(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.DarkGray)
+                    .background(MainBackgroundColor)
             ) {
                 MainAvatar(userData = userData)
             }
@@ -295,7 +296,7 @@ fun CharacterInfoText(text: String) {
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
         fontFamily = FontFamily(
             Font(
-                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+                R.font.gmarket_sans_medium, FontWeight.Normal, FontStyle.Normal
             )
         )
     )
@@ -341,23 +342,28 @@ fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
                 ) {
 
                     CharacterInfoText(text = "Lv. " + userData.basic.level)
+
                     Spacer(modifier = Modifier.width(8.dp))
+
                     Divider(
                         modifier = Modifier
                             .width(1.dp)
                             .fillMaxHeight()
-                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
+                            .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.LightGray
                     )
                     Spacer(modifier = Modifier.width(8.dp))
+
                     CharacterInfoText(text = userData.basic.worldName)
 
                     Spacer(modifier = Modifier.width(8.dp))
+
                     Divider(
                         modifier = Modifier
                             .width(1.dp)
                             .fillMaxHeight()
-                            .padding(0.dp, 4.dp, 0.dp, 4.dp), color = Color.LightGray
+                            .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.LightGray
                     )
+
                     Spacer(modifier = Modifier.width(8.dp))
 
                     CharacterInfoText(
@@ -366,8 +372,10 @@ fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
 
                 }
                 Spacer(
-                    modifier = Modifier.height(8.dp)
+                    modifier = Modifier.height(16.dp)
                 )
+
+                CombatPower(finalStatList = userData.stat.finalStatList)
             }
         }
     }
@@ -378,107 +386,14 @@ fun MainAvatar(userData: ResultVO?) {
 
     if (userData != null) {
         if (userData.stat == null) return
-
         Stats(charInfo = userData.stat, items = userData.itemEquipment)
     }
 }
 
 
-@Preview
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun previewToolbarView() {
-    MaSearchTheme {
-        PToolbarView()
-    }
-}
-
-
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun PToolbarView() {
-    val context = LocalContext.current
-    Column(
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .background(Color.DarkGray)
-    ) {
-
-        GlideImage(
-            model = ContextCompat.getDrawable(context, R.mipmap.temp_char_img),
-            contentDescription = "avatar",
-            modifier = Modifier
-                .width(120.dp)
-                .height(100.dp)
-        )
-
-        Column(
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Spacer(
-                modifier = Modifier.height(16.dp)
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                CharacterInfoText(text = "Lv.278")
-                Spacer(modifier = Modifier.width(4.dp))
-                Divider(
-                    modifier = Modifier
-                        .width(1.dp)
-                        .fillMaxHeight()
-                        .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                CharacterInfoText(text = "xzI존토벤x")
-
-                Spacer(modifier = Modifier.width(4.dp))
-                Divider(
-                    modifier = Modifier
-                        .width(1.dp)
-                        .fillMaxHeight()
-                        .padding(0.dp, 2.dp, 0.dp, 2.dp), color = Color.White
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-
-                CharacterInfoText(
-                    text = "아크메이지(썬,콜)"
-                )
-
-                Spacer(modifier = Modifier.width(4.dp))
-
-                GlideImage(
-                    model = ContextCompat.getDrawable(context, R.mipmap.temp_server_icon),
-                    contentDescription = "server",
-                    modifier = Modifier
-                        .width(14.dp)
-                        .height(14.dp)
-                )
-
-            }
-            Spacer(
-                modifier = Modifier.height(4.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        CombatPower()
-    }
-}
-
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun CombatPower() {
+fun CombatPower(finalStatList: List<FinalStatVO>) {
     val context = LocalContext.current
     Surface(
         color = CombatPowerBackgroundColor,
@@ -496,76 +411,64 @@ fun CombatPower() {
 
             CharacterInfoText(text = "전투력")
             Spacer(modifier = Modifier.width(16.dp))
-            CombatPowerTextView()
+
+            finalStatList[finalStatList.size - 2].statValue?.let { CombatPowerTextView(it) }
+
             Spacer(modifier = Modifier.width(16.dp))
             GlideImage(
                 model = ContextCompat.getDrawable(context, R.mipmap.ignore_shield),
                 contentDescription = "ignore_shield",
                 modifier = Modifier
-                    .width(16.dp)
-                    .height(18.dp)
+                    .width(18.dp)
+                    .height(20.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
-            IgnoreShieldTextView()
+            finalStatList[5].statValue?.let { IgnoreShieldTextView(it) }
+
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 
 }
 
-@Preview
-@Composable
-fun previewCombatPower() {
-    CombatPower()
-}
+//@Preview
+//@Composable
+//fun previewCombatPower() {
+//    CombatPower()
+//}
 
 @Composable
-fun CombatPowerTextView() {
+fun CombatPowerTextView(combatPower: String) {
+    Log.d("TAG", "convertToCombatPower: " + combatPower)
     Text(
-        text = "1억 8999만 4852",
+        text = convertToCombatPower(combatPower),
         textAlign = TextAlign.Center,
         fontSize = 12.sp,
         color = CombatPowerTextColor,
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
         fontFamily = FontFamily(
             Font(
-                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+                R.font.gmarket_sans_bold, FontWeight.Normal, FontStyle.Normal
             )
         )
     )
 }
 
 @Composable
-fun IgnoreShieldTextView() {
+fun IgnoreShieldTextView(ignoreNum : String) {
     Text(
-        text = "90.61%",
+        text = "$ignoreNum%",
         textAlign = TextAlign.Center,
         fontSize = 12.sp,
         color = Color.White,
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
         fontFamily = FontFamily(
             Font(
-                R.font.notosans_regular, FontWeight.Normal, FontStyle.Normal
+                R.font.gmarket_sans_bold, FontWeight.Normal, FontStyle.Normal
             )
         )
     )
 }
 
 
-@Composable
-fun AbilityStatView() {
-    Surface(
-        color = AbilityBackgroundColor,
-        shape = RoundedCornerShape(5.dp)
-    ) {
 
-    }
-}
-
-@Composable
-fun AbilityStatTextView(statType: String, num: String) {
-    Row {
-        Text(text = "$statType :")
-        Spacer(modifier = Modifier.weight(1f))
-        Text(text = num)
-    }
-}

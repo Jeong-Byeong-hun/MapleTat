@@ -4,18 +4,16 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Divider
+import androidx.compose.material.Surface
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -35,7 +33,9 @@ import androidx.compose.ui.unit.sp
 import com.example.masearch.api.vo.ItemEquipmentVO
 import com.example.masearch.api.vo.StatVO
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
-import com.example.masearch.ui.theme.DividerColor
+import com.example.masearch.ui.theme.MainBackgroundColor
+import com.example.masearch.view.stat.BasicStatView
+import com.example.masearch.view.stat.specialStatView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -72,11 +72,11 @@ fun Stats(charInfo: StatVO, items: ItemEquipmentVO) {
                     Text(
                         text = text, fontFamily = FontFamily(
                             Font(
-                                R.font.notosans_regular,
+                                R.font.gmarket_sans_medium,
                                 FontWeight.Normal,
                                 FontStyle.Normal
                             )
-                        )
+                        ), fontSize = 16.sp
                     )
                 })
 
@@ -168,139 +168,26 @@ fun BasicEquipmentTextview(text: String) {
 
 @Composable
 fun BasicInfo(charInfo: StatVO) {
-    Column(
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top,
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-            .verticalScroll(rememberScrollState())
-            .padding(0.dp, 0.dp, 0.dp, 30.dp)
-    ) {
-
-
-        BasicTitleTextView(text = "기본 스탯")
-        val basicStat = listOf<String>("HP", "MP", "STR", "DEX", "INT", "LUK")
-
-        LazyColumn(
+    Surface(modifier = Modifier.padding(16.dp)) {
+        Column(
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
+                .fillMaxHeight()
+                .background(MainBackgroundColor)
+                .verticalScroll(rememberScrollState())
+                .padding(0.dp, 0.dp, 0.dp, 30.dp)
         ) {
-            items(basicStat) { it ->
-                val foundStat =
-                    charInfo.finalStatList.find { finalStatVO -> finalStatVO.statName == it }
-                Log.d("TAG", "BasicInfo: " + foundStat)
-                if (foundStat != null) {
-                    val statValue = foundStat.statValue
-                    BasicInfoContentsTextView(text = "$it : $statValue")
-                }
-
+            Row {
+                BasicStatView(finalStatList = charInfo.finalStatList)
+                Spacer(modifier = Modifier.width(16.dp))
+                val modifier = Modifier.weight(1f).padding(6.dp, 6.dp, 6.dp, 2.dp)
+                specialStatView(finalStatList = charInfo.finalStatList, modifier)
             }
+
+
         }
-
-//        Row {
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "HP : ${charInfo.finalStatList.find { it.statName == "HP" }}")
-//            }
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "MP : ${charInfo.mp}")
-//            }
-//            Spacer(modifier = Modifier.weight(1f))
-//        }
-//
-//        Row {
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "STR : ${charInfo.str}")
-//            }
-//
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "DEX : ${charInfo.dex}")
-//            }
-//            Spacer(modifier = Modifier.weight(1f))
-//
-//        }
-//
-//        Row {
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "INT : ${charInfo.int}")
-//            }
-//
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "LUK : ${charInfo.luk}")
-//            }
-//
-//            Spacer(modifier = Modifier.weight(1f))
-//
-//        }
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//        BasicInfoContentsTextView(text = "스공 : ${charInfo.statAttPower[0]} ~ ${charInfo.statAttPower[1]}")
-//
-//        Row {
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "보공 : ${charInfo.boseOffensePower}")
-//            }
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "데미지 : ${charInfo.boseOffensePower}")
-//            }
-//
-//            Spacer(modifier = Modifier.weight(1f))
-//
-//        }
-//
-//        Row {
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "방무 : ${charInfo.ignoreDefense}")
-//            }
-//            Row(modifier = Modifier.weight(1f)) {
-//                BasicInfoContentsTextView(text = "크뎀 : ${charInfo.criticalDamage}")
-//            }
-//            Spacer(modifier = Modifier.weight(1f))
-//
-//        }
-
-
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 8.dp, 0.dp, 4.dp),
-            color = DividerColor,
-            thickness = 1.dp
-        )
-
-//        BasicTitleTextView(text = "${charInfo.ability.grade} 어빌리티")
-//        Text(
-//            text = "${charInfo.ability.grade} 어빌리티",
-//            color = Color.White,
-//            fontSize = 24.sp,
-//            modifier = Modifier.padding(16.dp, 4.dp, 16.dp, 0.dp),
-//            fontFamily = FontFamily(
-//                Font(
-//                    R.font.notosans_regular,
-//                    FontWeight.Normal,
-//                    FontStyle.Normal
-//                )
-//            )
-//        )
-//        for (i: String in charInfo.ability.value) {
-//            BasicInfoContentsTextView(text = i)
-//        }
-
-        Divider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(0.dp, 8.dp, 0.dp, 4.dp),
-            color = DividerColor,
-            thickness = 1.dp
-        )
-
-        BasicTitleTextView(text = "하이퍼 스탯")
-
-//        for (i: String in charInfo.hyperStats) {
-//            BasicInfoContentsTextView(text = i)
-//        }
-
     }
 
 }
