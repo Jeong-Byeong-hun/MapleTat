@@ -5,10 +5,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.example.masearch.mainui.LikeCharacterHolder
-import com.example.masearch.mainui.PToolbarView
-import com.example.masearch.mainui.previewLikeCharacter
 import com.example.masearch.ui.theme.MaSearchTheme
 import com.example.masearch.util.Navigation
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,13 +23,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaSearchTheme {
                 Navigation(viewModel)
-//                LikeCharacterHolder(10)
-//                previewLikeCharacter()
-//                PToolbarView()
-
             }
         }
-
     }
 }
 

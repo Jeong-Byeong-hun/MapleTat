@@ -431,12 +431,6 @@ fun CombatPower(finalStatList: List<FinalStatVO>) {
 
 }
 
-//@Preview
-//@Composable
-//fun previewCombatPower() {
-//    CombatPower()
-//}
-
 @Composable
 fun CombatPowerTextView(combatPower: String) {
     Log.d("TAG", "convertToCombatPower: " + combatPower)
