@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -35,7 +36,8 @@ import com.example.masearch.api.vo.StatVO
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.MainBackgroundColor
 import com.example.masearch.view.stat.BasicStatView
-import com.example.masearch.view.stat.specialStatView
+import com.example.masearch.view.stat.EtcStatView
+import com.example.masearch.view.stat.SpecialStatView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -182,10 +184,17 @@ fun BasicInfo(charInfo: StatVO) {
             Row {
                 BasicStatView(finalStatList = charInfo.finalStatList)
                 Spacer(modifier = Modifier.width(16.dp))
-                val modifier = Modifier.weight(1f).padding(6.dp, 6.dp, 6.dp, 2.dp)
-                specialStatView(finalStatList = charInfo.finalStatList, modifier)
+                val modifier = Modifier
+                    .weight(1f)
+                    .padding(6.dp, 6.dp, 6.dp, 2.dp)
+                SpecialStatView(finalStatList = charInfo.finalStatList, modifier)
             }
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Row {
+                EtcStatView(finalStatList = charInfo.finalStatList)
+            }
 
         }
     }

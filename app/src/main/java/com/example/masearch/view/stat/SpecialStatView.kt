@@ -25,7 +25,7 @@ import com.example.masearch.ui.theme.SpecialDamageBackgroundColor
 import com.example.masearch.util.convertToCombatPower
 
 @Composable
-fun specialStatView(finalStatList: List<FinalStatVO>, modifier: Modifier) {
+fun SpecialStatView(finalStatList: List<FinalStatVO>, modifier: Modifier) {
     val basicStat =
         listOf<String>("데미지", "보스 몬스터 데미지", "최종 데미지", "크리티컬 데미지", "상태이상 추가 데미지")
     Surface(
