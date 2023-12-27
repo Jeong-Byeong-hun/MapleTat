@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.masearch.LikeCharacterViewModel
 import com.example.masearch.mainui.MainView
 import com.example.masearch.MainViewModel
 import com.example.masearch.mainui.ParallaxEffect
@@ -13,7 +14,7 @@ import com.example.masearch.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun Navigation(viewModel: MainViewModel) {
+fun Navigation(viewModel: MainViewModel, likeViewModel: LikeCharacterViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
@@ -33,6 +34,7 @@ fun Navigation(viewModel: MainViewModel) {
                 },
                 id = it.arguments?.getString("searchId", ""),
                 viewModel = viewModel,
+                likeCharacterViewModel = likeViewModel
             )
         }
 

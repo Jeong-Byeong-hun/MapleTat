@@ -1,5 +1,6 @@
 package com.example.masearch
 
+import androidx.lifecycle.LiveData
 import com.example.masearch.api.vo.LikeCharacterVo
 import com.example.masearch.dao.LikeCharacterDao
 import javax.inject.Inject
@@ -13,7 +14,7 @@ class LikeCharacterRepository @Inject constructor(private val likeCharacterDao: 
         likeCharacterDao.deleteData(nickname)
     }
 
-    suspend fun getAllCharacterList(): List<LikeCharacterVo> {
+    fun getAllCharacterList(): LiveData<List<LikeCharacterVo>> {
         return likeCharacterDao.getAllLickCharacter()
     }
 }

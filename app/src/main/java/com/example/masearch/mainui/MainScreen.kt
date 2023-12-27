@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -50,13 +48,13 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.masearch.LikeCharacterViewModel
 import com.example.masearch.MainViewModel
 import com.example.masearch.R
 import com.example.masearch.Stats
@@ -65,10 +63,7 @@ import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.screen.Screen
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
-import com.example.masearch.ui.theme.MaSearchTheme
 import com.example.masearch.ui.theme.MainBackgroundColor
-import com.example.masearch.ui.theme.StatBackgroundColor
-import com.example.masearch.util.addCommas
 import com.example.masearch.util.convertToCombatPower
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
@@ -135,7 +130,8 @@ fun MainView(navController: NavController) {
 fun ParallaxEffect(
     navigateBack: () -> Unit,
     id: String?,
-    viewModel: MainViewModel
+    viewModel: MainViewModel,
+    likeCharacterViewModel: LikeCharacterViewModel
 ) {
     val state = rememberCollapsingToolbarScaffoldState()
     var showDialog by remember { mutableStateOf(false) }
@@ -188,6 +184,23 @@ fun ParallaxEffect(
 
                     Spacer(
                         modifier = Modifier.width(4.dp)
+                    )
+
+                    GlideImage(
+                        model = ContextCompat.getDrawable(context, R.mipmap.star),
+                        contentDescription = "like",
+                        modifier = Modifier
+                            .height(40.dp)
+                            .width(40.dp)
+                            .clickable(onClick = {
+                                likeCharacterViewModel.insertLikeCharacter(
+                                    userData!!.basic.charName,
+                                    userData!!.basic.charImage
+                                )
+                            })
+                            .align(Alignment.CenterVertically)
+                            .padding(12.dp)
+
                     )
 
                     val textModifier = Modifier
@@ -248,14 +261,6 @@ fun ParallaxEffect(
             }
 
         }
-
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(Color.DarkGray)
-//        ) {
-//            MainAvatar(userData = userData)
-//        }
 
     }
 }
@@ -449,7 +454,7 @@ fun CombatPowerTextView(combatPower: String) {
 }
 
 @Composable
-fun IgnoreShieldTextView(ignoreNum : String) {
+fun IgnoreShieldTextView(ignoreNum: String) {
     Text(
         text = "$ignoreNum%",
         textAlign = TextAlign.Center,
