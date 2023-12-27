@@ -42,13 +42,13 @@ fun LikeCharacterHolder(index : Int) {
         shape = RoundedCornerShape(5.dp)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
-            GlideImage(
-                model = "https://open.api.nexon.com/static/maplestory/ItemIcon/KEPCJGME.png",
-                contentDescription = "serverIcon",
-                modifier = Modifier
-                    .width(14.dp)
-                    .height(14.dp)
-            )
+//            GlideImage(
+//                model = "https://open.api.nexon.com/static/maplestory/ItemIcon/KEPCJGME.png",
+//                contentDescription = "serverIcon",
+//                modifier = Modifier
+//                    .width(14.dp)
+//                    .height(14.dp)
+//            )
 
             GlideImage(
                 model = "https://open.api.nexon.com/static/maplestory/Character/MBOPMFBPDMIMILJBMAINHCNCDBNHHJDJBBHNOLBJFHLKMLLLMBCIFOMGKFJPONMNOFKGKOGLMJGOCLDGALLKABBJLHEIDAGCGKCELMOMEDLDNMMADJOMCNFNJLHHJBFJPKFPHDNPHKBKFEHDGFILJPGKIJGIDMMDFBMANNBLHBGIEDMNFINPELOKKAGMPHLLEGNEHGEHHKLAAEIAEEFBDBCIOJNINMBCNOJCBJGFBDPCJDPAOAHHMLIKHNGOCKJJ.png",
