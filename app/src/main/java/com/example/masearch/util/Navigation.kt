@@ -14,7 +14,7 @@ import com.example.masearch.screen.Screen
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun Navigation(viewModel: MainViewModel, likeViewModel: LikeCharacterViewModel) {
+fun Navigation() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Screen.MainScreen.route) {
@@ -33,8 +33,6 @@ fun Navigation(viewModel: MainViewModel, likeViewModel: LikeCharacterViewModel) 
                     navController.popBackStack()
                 },
                 id = it.arguments?.getString("searchId", ""),
-                viewModel = viewModel,
-                likeCharacterViewModel = likeViewModel
             )
         }
 

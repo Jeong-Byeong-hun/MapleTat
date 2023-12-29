@@ -32,7 +32,7 @@ fun EtcStatView(finalStatList: List<FinalStatVO>){
     Surface( color = EtcStatBackgroundColor, shape = RoundedCornerShape(5.dp)) {
 
         Column(modifier = Modifier
-            .width(195.dp)
+            .width(200.dp)
             .padding(6.dp, 6.dp, 6.dp, 2.dp)) {
             for (i in attackPowerList){
                 val foundStat = finalStatList.find { finalStatVO -> finalStatVO.statName == i }

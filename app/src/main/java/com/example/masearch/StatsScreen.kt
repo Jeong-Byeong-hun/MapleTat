@@ -31,12 +31,15 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.masearch.api.vo.HyperStatVO
 import com.example.masearch.api.vo.ItemEquipmentVO
+import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.api.vo.StatVO
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.MainBackgroundColor
 import com.example.masearch.view.stat.BasicStatView
 import com.example.masearch.view.stat.EtcStatView
+import com.example.masearch.view.stat.HyperStatView
 import com.example.masearch.view.stat.SpecialStatView
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -45,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun Stats(charInfo: StatVO, items: ItemEquipmentVO) {
+fun Stats(userData: ResultVO) {
     val scrollState = rememberScrollState()
 
     val tabData = listOf(
@@ -94,7 +97,7 @@ fun Stats(charInfo: StatVO, items: ItemEquipmentVO) {
         state = pagerState
     ) {
         when (it) {
-            0 -> BasicInfo(charInfo = charInfo)
+            0 -> BasicInfo(charInfo = userData.stat, hyperStatVO = userData.hyperStat)
 
             1 -> {
 
@@ -169,7 +172,7 @@ fun BasicEquipmentTextview(text: String) {
 }
 
 @Composable
-fun BasicInfo(charInfo: StatVO) {
+fun BasicInfo(charInfo: StatVO, hyperStatVO: HyperStatVO) {
     Surface(modifier = Modifier.padding(16.dp)) {
         Column(
             horizontalAlignment = Alignment.Start,
@@ -194,6 +197,12 @@ fun BasicInfo(charInfo: StatVO) {
 
             Row {
                 EtcStatView(finalStatList = charInfo.finalStatList)
+                Spacer(modifier = Modifier.width(16.dp))
+                val modifier = Modifier
+                    .weight(1f)
+                    .padding(6.dp, 6.dp, 6.dp, 2.dp)
+                HyperStatView(modifier = modifier, hyperStat = hyperStatVO)
+
             }
 
         }

@@ -51,6 +51,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -125,20 +127,22 @@ fun MainView(navController: NavController) {
 }
 
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ParallaxEffect(
     navigateBack: () -> Unit,
     id: String?,
-    viewModel: MainViewModel,
-    likeCharacterViewModel: LikeCharacterViewModel
 ) {
     val state = rememberCollapsingToolbarScaffoldState()
     var showDialog by remember { mutableStateOf(false) }
     var receivedText by remember { mutableStateOf(id.orEmpty()) }
     var enabled by remember { mutableStateOf(true) }
     val context = LocalContext.current
+
     Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
+
+    val viewModel: MainViewModel = hiltViewModel()
+    val likeCharacterViewModel: LikeCharacterViewModel = hiltViewModel()
 
     LaunchedEffect(key1 = receivedText) {
         receivedText.let {
@@ -391,7 +395,7 @@ fun MainAvatar(userData: ResultVO?) {
 
     if (userData != null) {
         if (userData.stat == null) return
-        Stats(charInfo = userData.stat, items = userData.itemEquipment)
+        Stats(userData = userData)
     }
 }
 

@@ -30,8 +30,9 @@ val CombatPowerTextColor = Color(0xFFEBED7C)
 val StatBackgroundColor = Color(0xCC317094)
 val SpecialDamageBackgroundColor = Color(0xCC45504C)
 val EtcStatBackgroundColor = Color(0x80656B6B)
-val HyperStatBackgroundColor = Color(0x4D656B6B)
 
-val HyperStatLevelColor = Color(0x99AAB0B8)
+val HyperStatBackgroundColor = Color(0x4D656B6B)
+val HyperStatLevelColor = Color(0xFF5B81B9)
 val HyperStatSelectBoxColor = Color(0x80DFB371)
 val HyperStatUnSelectBoxColor = Color(0xB3C5C5C5)
+
