@@ -40,7 +40,7 @@ import com.example.masearch.ui.theme.HyperStatUnSelectBoxColor
 
 @Composable
 fun HyperStatView(modifier: Modifier, hyperStat: HyperStatVO) {
-    var selectedButton by remember { mutableIntStateOf(1) }
+    var selectedButton by remember { mutableIntStateOf(hyperStat.usePresetNum.toInt()) }
 
 
     Surface(color = HyperStatBackgroundColor, shape = RoundedCornerShape(5.dp)) {
@@ -51,6 +51,18 @@ fun HyperStatView(modifier: Modifier, hyperStat: HyperStatVO) {
                 3 -> hyperStat.hyperStatThird
                 else -> emptyList()
             }
+            Text(
+                text = "현재 적용중인 어빌리티 ${hyperStat.usePresetNum}번",
+                color = Color.White, fontSize = 12.sp, fontFamily = FontFamily(
+                    Font(
+                        R.font.gmarket_sans_medium,
+                        FontWeight.Normal,
+                        FontStyle.Normal
+                    )
+                )
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
 
             for (i in selectHyperStat) {
                 if (i.statLevel > 0) {
