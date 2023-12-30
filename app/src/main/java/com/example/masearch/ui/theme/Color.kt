@@ -36,3 +36,10 @@ val HyperStatLevelColor = Color(0xFF5B81B9)
 val HyperStatSelectBoxColor = Color(0x80DFB371)
 val HyperStatUnSelectBoxColor = Color(0xB3C5C5C5)
 
+val EquipmentDialogBackgroundColor = Color(0xB3484848)
+val StarForceIconColor = Color(0xFFEBFF00)
+val ItemDetailBackgroundColor = Color(0xB3000000)
+val ItemAddOptionColor = Color(0xFFA3CC00)
+val ItemEtcOptionColor = Color(0xFF406AFF)
+val ItemStarForceOptionColor = Color(0xFFFFCC00)
+

@@ -12,6 +12,9 @@ data class ItemOptionDetailVO(
     @SerializedName("int")
     val int: String,
 
+    @SerializedName("luk")
+    val luk : String,
+
     @SerializedName("max_hp")
     val maxHp: String,
 

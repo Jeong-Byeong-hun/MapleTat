@@ -33,7 +33,6 @@ import com.example.masearch.ui.theme.EpicBackgroundColor
 import com.example.masearch.ui.theme.LegendaryBackgroundColor
 import com.example.masearch.ui.theme.RareBackgroundColor
 import com.example.masearch.ui.theme.UniqueBackgroundColor
-import com.example.masearch.util.AddOptionCalculator
 import com.example.masearch.util.convertTime
 import com.example.masearch.util.equipmentSort
 
@@ -47,7 +46,6 @@ fun EquipmentList(equipment: ItemEquipmentVO, jobClass: String) {
         itemsIndexed(equipmentSort(equipList = equipment.itemEquipmentList)) { index, item ->
             Equipment(itemsVo = item, jobClass)
             Spacer(modifier = Modifier.height(8.dp))
-
             Divider(thickness = 1.dp, color = DividerColor)
 
             if (equipment.itemEquipmentList.size - 1 == index) {
@@ -90,12 +88,12 @@ fun Equipment(itemsVo: ItemEquipmentDetailVO, jobClass: String) {
                 //todo 추옵설정
 //                if (itemsVo.itemSlot == "무기") {
 //
-////                    BasicEquipmentTextview(
-////                        text = AddOptionCalculator().calculateAddOption(
-////                            itemsVo,
-////                            jobClass.split("/")[1]
-////                        ).toString() + "급"
-////                    )
+//                    BasicEquipmentTextview(
+//                        text = AddOptionCalculator().calculateAddOption(
+//                            itemsVo,
+//                            jobClass.split("/")[1]
+//                        ).toString() + "급"
+//                    )
 //                }
             }
 
