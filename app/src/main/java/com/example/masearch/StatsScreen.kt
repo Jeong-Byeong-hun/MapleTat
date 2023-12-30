@@ -37,6 +37,7 @@ import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.api.vo.StatVO
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.MainBackgroundColor
+import com.example.masearch.view.equipment.EquipmentList
 import com.example.masearch.view.stat.BasicStatView
 import com.example.masearch.view.stat.EtcStatView
 import com.example.masearch.view.stat.HyperStatView
@@ -101,7 +102,7 @@ fun Stats(userData: ResultVO) {
 
             1 -> {
 
-//                EquipmentList(items = itemList, jobClass = charInfo.role)
+                EquipmentList(equipment = userData.itemEquipment, jobClass = userData.basic.charClass)
 
             }
 
@@ -209,164 +210,3 @@ fun BasicInfo(charInfo: StatVO, hyperStatVO: HyperStatVO) {
     }
 
 }
-
-//@Composable
-//fun EquipmentList(items: MutableList<ItemsVo>, jobClass: String) {
-//
-//    LazyColumn(
-//        modifier = Modifier
-//            .fillMaxSize()
-//    ) {
-//        items(items) {
-//            Equipment(itemsVo = it, jobClass)
-//            Spacer(modifier = Modifier.height(8.dp))
-//        }
-//    }
-//}
-
-//@OptIn(ExperimentalGlideComposeApi::class)
-//@Composable
-//fun Equipment(itemsVo: ItemsVo, jobClass: String) {
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp, 8.dp, 16.dp, 0.dp)
-//    ) {
-//        GlideImage(
-//            model = itemsVo.image, contentDescription = itemsVo.name,
-//            modifier = Modifier
-//                .height(50.dp)
-//                .width(50.dp)
-//                .align(Alignment.CenterVertically),
-//            alignment = Alignment.Center
-//        )
-//        Column(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(8.dp, 0.dp, 0.dp, 0.dp)
-//        ) {
-//            Row {
-//                BasicEquipmentTextview(text = itemsVo.name)
-//                Spacer(modifier = Modifier.width(6.dp))
-//                BasicEquipmentTextview(text = itemsVo.starforce.replace(" 강화", ""))
-//
-//                Spacer(modifier = Modifier.width(4.dp))
-//                if (!emptyAddOption.contains(itemsVo.itemType)) {
-//                    BasicEquipmentTextview(
-//                        text = AddOptionCalculator().calculateAddOption(
-//                            itemsVo,
-//                            jobClass.split("/")[1]
-//                        ).toString() + "급"
-//                    )
-//                }
-//            }
-//
-//            Column {
-//                Spacer(modifier = Modifier.width(8.dp))
-//                var color = when (itemsVo.potential.grade) {
-//                    "레어" -> RareBackgroundColor
-//                    "에픽" -> EpicBackgroundColor
-//                    "유니크" -> UniqueBackgroundColor
-//                    "레전드리" -> LegendaryBackgroundColor
-//                    else -> Color.Transparent
-//                }
-//                Card(
-//                    shape = RoundedCornerShape(5.dp),
-//                    colors = CardDefaults.cardColors(color)
-//                ) {
-//                    Row(
-//                        modifier = Modifier
-//                            .wrapContentHeight()
-//                            .wrapContentWidth(),
-//                        verticalAlignment = Alignment.CenterVertically,
-//                        horizontalArrangement = Arrangement.Center
-//                    ) {
-//                        BasicEquipmentTextview(text = itemsVo.potential.grade)
-//                        PotentialText(potential = itemsVo.potential)
-//                    }
-//                }
-//
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//                if (itemsVo.additionalPotential.grade.isNotEmpty()) {
-//                    color = when (itemsVo.additionalPotential.grade) {
-//                        "레어" -> RareBackgroundColor
-//                        "에픽" -> EpicBackgroundColor
-//                        "유니크" -> UniqueBackgroundColor
-//                        "레전드리" -> LegendaryBackgroundColor
-//                        else -> Color.Transparent
-//                    }
-//
-//                    Card(
-//                        shape = RoundedCornerShape(5.dp),
-//                        colors = CardDefaults.cardColors(color)
-//                    ) {
-//                        Row(
-//                            modifier = Modifier
-//                                .wrapContentHeight()
-//                                .wrapContentWidth(),
-//                            verticalAlignment = Alignment.CenterVertically,
-//                            horizontalArrangement = Arrangement.Center
-//                        ) {
-//                            BasicEquipmentTextview(text = itemsVo.additionalPotential.grade)
-//                            PotentialText(potential = itemsVo.additionalPotential)
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }
-//    }
-//}
-//
-//@Composable
-//fun PotentialText(potential: Potential) {
-//    for (item in potential.option) {
-//        if (item is ArrayList<*>) {
-//            var potentialText = ""
-//
-//            potentialText = when (item[0]) {
-//                "몬스터 방어율 무시" -> {
-//                    "방무"
-//                }
-//
-//                "보스 몬스터 공격 시 데미지" -> {
-//                    "보공"
-//                }
-//
-//                "메소 획득량" -> {
-//                    "메획"
-//                }
-//
-//                "아이템 드롭률" -> {
-//                    "아획"
-//                }
-//
-//                "모든 스킬의 재사용 대기시간" -> {
-//                    "쿨감"
-//                }
-//
-//                "크리티컬 데미지" -> {
-//                    "크뎀"
-//                }
-//
-//                else -> {
-//                    item[0].toString()
-//                }
-//            }
-//
-//            if (potentialText == "쿨감") {
-//                BasicEquipmentTextview(
-//                    text = potentialText + " " + item[1].toString().substring(0, 3)
-//                )
-//            } else {
-//                BasicEquipmentTextview(text = potentialText + " " + item[1].toString())
-//            }
-//
-//
-//            Spacer(modifier = Modifier.width(6.dp))
-//        }
-//    }
-//
-//}

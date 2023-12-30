@@ -52,7 +52,7 @@ fun HyperStatView(modifier: Modifier, hyperStat: HyperStatVO) {
                 else -> emptyList()
             }
             Text(
-                text = "현재 적용중인 어빌리티 ${hyperStat.usePresetNum}번",
+                text = "현재 적용중인 하이퍼 스탯 ${hyperStat.usePresetNum}번",
                 color = Color.White, fontSize = 12.sp, fontFamily = FontFamily(
                     Font(
                         R.font.gmarket_sans_medium,

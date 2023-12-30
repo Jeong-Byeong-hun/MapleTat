@@ -26,15 +26,21 @@ data class ItemEquipmentDetailVO(
     @SerializedName("item_base_option")
     val itemBaseOption: ItemOptionDetailVO,
     @SerializedName("potential_option_grade")
-    val potentialOptionGrade: String,
+    val potentialOptionGrade: String?,
     @SerializedName("potential_option_1")
-    val potentialOption1: String,
+    val potentialOption1: String?,
     @SerializedName("potential_option_2")
-    val potentialOption2: String,
+    val potentialOption2: String?,
     @SerializedName("potential_option_3")
-    val potentialOption3: String,
-    @SerializedName("additional_potential_option")
-    val additionalPotentialOption: AdditionalPotentialOption,
+    val potentialOption3: String?,
+    @SerializedName("additional_potential_option_grade")
+    val additionalPotentialOptionGrade: String?,
+    @SerializedName("additional_potential_option_1")
+    val additionalPotentialOption1: String?,
+    @SerializedName("additional_potential_option_2")
+    val additionalPotentialOption2: String?,
+    @SerializedName("additional_potential_option_3")
+    val additionalPotentialOption3: String?,
     @SerializedName("equipment_level_increase")
     val equipmentLevelIncrease: Int,
     @SerializedName("item_exceptional_option")

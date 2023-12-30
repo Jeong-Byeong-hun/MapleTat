@@ -1,6 +1,8 @@
 package com.example.masearch.util
 
 import android.util.Log
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun addCommas(input: String): String {
     return try {
@@ -48,4 +50,18 @@ fun convertToCombatPower(input: String): String {
     } catch (e: NumberFormatException) {
         return "Invalid Number"
     }
+}
+
+fun convertTime(serverTime: String): String {
+    var time = serverTime.replace("T", " ").substring(0, serverTime.indexOf("+"))
+    Log.d("TAG", "convertTime: $time")
+
+    // 입력된 문자열을 LocalDateTime으로 파싱
+    val dateTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
+
+    // 새로운 형식으로 포맷
+    val formattedDateString = dateTime.format(DateTimeFormatter.ofPattern("yyyy년 M월 d일 a hh:mm까지 사용가능"))
+
+
+    return formattedDateString
 }
