@@ -33,11 +33,13 @@ import com.example.masearch.ui.theme.EpicBackgroundColor
 import com.example.masearch.ui.theme.LegendaryBackgroundColor
 import com.example.masearch.ui.theme.RareBackgroundColor
 import com.example.masearch.ui.theme.UniqueBackgroundColor
+import com.example.masearch.util.AddOptionCalculator
 import com.example.masearch.util.convertTime
 import com.example.masearch.util.equipmentSort
 
 @Composable
 fun EquipmentList(equipment: ItemEquipmentVO, jobClass: String) {
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -86,13 +88,14 @@ fun Equipment(itemsVo: ItemEquipmentDetailVO, jobClass: String) {
                 Spacer(modifier = Modifier.width(4.dp))
 
                 //todo 추옵설정
-//                if (!emptyAddOption.contains(itemsVo.itemType)) {
-//                    BasicEquipmentTextview(
-//                        text = AddOptionCalculator().calculateAddOption(
-//                            itemsVo,
-//                            jobClass.split("/")[1]
-//                        ).toString() + "급"
-//                    )
+//                if (itemsVo.itemSlot == "무기") {
+//
+////                    BasicEquipmentTextview(
+////                        text = AddOptionCalculator().calculateAddOption(
+////                            itemsVo,
+////                            jobClass.split("/")[1]
+////                        ).toString() + "급"
+////                    )
 //                }
             }
 
