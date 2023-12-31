@@ -1,6 +1,11 @@
 package com.example.masearch.util
 
 import android.util.Log
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -64,4 +69,11 @@ fun convertTime(serverTime: String): String {
 
 
     return formattedDateString
+}
+
+inline fun Modifier.noRippleClickable(crossinline onClick: ()->Unit): Modifier = composed {
+    clickable(indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
+    }
 }

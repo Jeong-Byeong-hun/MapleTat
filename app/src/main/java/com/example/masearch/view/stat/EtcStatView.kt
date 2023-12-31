@@ -19,11 +19,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.masearch.R
+import com.example.masearch.api.vo.AbilityVO
 import com.example.masearch.api.vo.FinalStatVO
 import com.example.masearch.ui.theme.EtcStatBackgroundColor
 
 @Composable
-fun EtcStatView(finalStatList: List<FinalStatVO>){
+fun EtcStatView(finalStatList: List<FinalStatVO>, abilityVO: AbilityVO){
     val attackPowerList = listOf<String>("공격력","마력")
     val recycleStatList = listOf<String>("재사용 대기시간 감소")
     val etcStatList = listOf<String>( "재사용 대기시간 미적용", "버프 지속시간","속성 내성 무시", "일반 몬스터 데미지", "메소 획득량", "아이템 드롭률" )
@@ -89,6 +90,8 @@ fun EtcStatView(finalStatList: List<FinalStatVO>){
                     }
                 }
             }
+
+            AbilityStatView(abilityVO = abilityVO)
 
 
         }

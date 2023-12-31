@@ -31,8 +31,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.masearch.api.vo.AbilityVO
 import com.example.masearch.api.vo.HyperStatVO
-import com.example.masearch.api.vo.ItemEquipmentVO
 import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.api.vo.StatVO
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
@@ -85,7 +85,6 @@ fun Stats(userData: ResultVO) {
                         ), fontSize = 16.sp
                     )
                 })
-
         }
     }
 
@@ -98,11 +97,18 @@ fun Stats(userData: ResultVO) {
         state = pagerState
     ) {
         when (it) {
-            0 -> BasicInfo(charInfo = userData.stat, hyperStatVO = userData.hyperStat)
+            0 -> BasicInfo(
+                charInfo = userData.stat,
+                hyperStatVO = userData.hyperStat,
+                abilityVO = userData.ability
+            )
 
             1 -> {
 
-                EquipmentList(equipment = userData.itemEquipment, jobClass = userData.basic.charClass)
+                EquipmentList(
+                    equipment = userData.itemEquipment,
+                    jobClass = userData.basic.charClass
+                )
 
             }
 
@@ -155,11 +161,11 @@ fun BasicInfoContentsTextView(text: String) {
 }
 
 @Composable
-fun BasicEquipmentTextview(text: String) {
+fun BasicEquipmentTextview(text: String, color: Color = Color.White) {
     Text(
         text = text,
         style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
-        color = Color.White,
+        color = color,
         modifier = Modifier.padding(2.dp),
         fontSize = 14.sp,
         fontFamily = FontFamily(
@@ -173,7 +179,7 @@ fun BasicEquipmentTextview(text: String) {
 }
 
 @Composable
-fun BasicInfo(charInfo: StatVO, hyperStatVO: HyperStatVO) {
+fun BasicInfo(charInfo: StatVO, hyperStatVO: HyperStatVO, abilityVO: AbilityVO) {
     Surface(modifier = Modifier.padding(16.dp)) {
         Column(
             horizontalAlignment = Alignment.Start,
@@ -197,13 +203,12 @@ fun BasicInfo(charInfo: StatVO, hyperStatVO: HyperStatVO) {
             Spacer(modifier = Modifier.height(16.dp))
 
             Row {
-                EtcStatView(finalStatList = charInfo.finalStatList)
+                EtcStatView(finalStatList = charInfo.finalStatList, abilityVO = abilityVO)
                 Spacer(modifier = Modifier.width(16.dp))
                 val modifier = Modifier
                     .weight(1f)
                     .padding(6.dp, 6.dp, 6.dp, 2.dp)
                 HyperStatView(modifier = modifier, hyperStat = hyperStatVO)
-
             }
 
         }

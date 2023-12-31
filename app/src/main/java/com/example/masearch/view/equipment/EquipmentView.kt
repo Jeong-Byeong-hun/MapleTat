@@ -18,6 +18,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,6 +39,7 @@ import com.example.masearch.ui.theme.RareBackgroundColor
 import com.example.masearch.ui.theme.UniqueBackgroundColor
 import com.example.masearch.util.convertTime
 import com.example.masearch.util.equipmentSort
+import com.example.masearch.util.noRippleClickable
 
 @Composable
 fun EquipmentList(equipment: ItemEquipmentVO, jobClass: String) {
@@ -59,10 +64,17 @@ fun EquipmentList(equipment: ItemEquipmentVO, jobClass: String) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun Equipment(itemsVo: ItemEquipmentDetailVO, jobClass: String) {
+    var dialogState by remember {
+        mutableStateOf(false)
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp, 8.dp, 16.dp, 0.dp)
+            .noRippleClickable {
+                dialogState = true
+            }
     ) {
         GlideImage(
             model = itemsVo.itemIcon, contentDescription = itemsVo.itemName,
@@ -164,6 +176,10 @@ fun Equipment(itemsVo: ItemEquipmentDetailVO, jobClass: String) {
 
             }
         }
+    }
+
+    if (dialogState) {
+        EquipmentDialogView(item = itemsVo) { dialogState = false }
     }
 }
 
