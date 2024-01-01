@@ -103,6 +103,8 @@ fun LikeCharacterView(navController: NavController, navigateBack: () -> Unit) {
                         .padding(12.dp)
                 )
 
+
+
             }
 
             LazyVerticalGrid(
