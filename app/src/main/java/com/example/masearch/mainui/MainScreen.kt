@@ -15,17 +15,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,19 +41,20 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -67,65 +69,187 @@ import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
 import com.example.masearch.ui.theme.MainBackgroundColor
 import com.example.masearch.util.convertToCombatPower
+import com.example.masearch.util.noRippleClickable
 import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 @Composable
 fun MainView(navController: NavController) {
 
     var id by remember { mutableStateOf(TextFieldValue("")) }
     val coroutineScope = rememberCoroutineScope()
-
     val snackbarHostState = remember {
         SnackbarHostState()
     }
+
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { it ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(it)
+                .background(MainBackgroundColor),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Screen 1")
-            TextField(
-                value = id,
-                onValueChange = { s -> id = s },
-                placeholder = { Text(text = "아이디를 입력해주세요.") },
-                singleLine = true
+            GlideImage(
+                model = ContextCompat.getDrawable(LocalContext.current, R.mipmap.mapletat),
+                contentDescription = null
             )
+//            Text(
+//                text = "MapleTat", fontSize = 26.sp,
+//                fontFamily = FontFamily(
+//                    Font(
+//                        R.font.notosans_bold,
+//                        FontWeight.Normal,
+//                        FontStyle.Normal
+//                    )
+//                ),
+//                color = Color.White
+//            )
+            Spacer(modifier = Modifier.height(30.dp))
+            MainTextField(
+                value = id.text.toString(),
+                onValueChange = { s -> id = TextFieldValue(s) },
+                placeholder = "닉네임을 입력해주세요",
+                onTrailingIconClick = {
+                    if (id.text.isEmpty() && snackbarHostState.currentSnackbarData == null) {
+                        coroutineScope.launch() {
+                            snackbarHostState.showSnackbar(
+                                message = "아이디를 입력해주세요.",
+                                actionLabel = "닫기",
+                                duration = SnackbarDuration.Short
+                            ).let {
 
-            Button(onClick = {
-                if (id.text.isEmpty() && snackbarHostState.currentSnackbarData == null) {
-                    // 아이디가 비어 있고 스낵바가 표시 중이 아닌 경우에만 스낵바를 표시
-                    coroutineScope.launch() {
-                        snackbarHostState.showSnackbar(
-                            message = "아이디를 입력해주세요.",
-                            actionLabel = "닫기",
-                            duration = SnackbarDuration.Short
-                        ).let {
-                            when (it) {
-                                SnackbarResult.ActionPerformed -> Log.d("TAG", "MainView: 스낵바 확인")
-                                SnackbarResult.Dismissed -> Log.d("TAG", "MainView: 스낵바 닫기")
                             }
                         }
+                    } else if (id.text.isNotEmpty()) {
+                        navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString()))
                     }
+                },
+                keyboardActionsClick = {
+                    if (id.text.isEmpty() && snackbarHostState.currentSnackbarData == null) {
+                        coroutineScope.launch() {
+                            snackbarHostState.showSnackbar(
+                                message = "아이디를 입력해주세요.",
+                                actionLabel = "닫기",
+                                duration = SnackbarDuration.Short
+                            ).let {
 
-                } else if (id.text.isNotEmpty()) {
-                    // 아이디가 비어 있지 않으면 다음 화면으로 이동
-                    navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString()))
+                            }
+                        }
+                    } else if (id.text.isNotEmpty()) {
+                        navController.navigate(Screen.SearchScreen.searchCharacter(id.text.toString()))
+                    }
                 }
-            }) {
-                Text(text = "Navigate to next screen")
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                MainTextView(text = "최근검색기록", onTextClick = {
+                    Log.d("TAG", "MainView: 최근검색")
+                })
+                Divider(
+                    modifier = Modifier
+                        .padding(10.dp, 0.dp, 10.dp, 0.dp)
+                        .width(1.dp)
+                        .height(24.dp),
+                    thickness = 1.dp,
+                    color = Color.White
+                )
+                MainTextView(text = "즐겨찾기", onTextClick = {
+                    navController.navigate(Screen.LikeScreen.route)
+                })
             }
         }
     }
 }
 
+@Composable
+fun MainTextView(text: String, onTextClick: () -> Unit) {
+    Text(
+        text = text, modifier = Modifier.noRippleClickable { onTextClick() },
+        fontSize = 20.sp,
+        fontFamily = FontFamily(
+            Font(
+                R.font.notosans_regular,
+                FontWeight.Normal,
+                FontStyle.Normal
+            )
+        ),
+        color = Color.White
+    )
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    onTrailingIconClick: () -> Unit,
+    keyboardActionsClick: () -> Unit
+) {
+    TextField(
+        modifier = Modifier
+            .padding(52.dp, 0.dp, 52.dp, 0.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(90.dp),
+        value = value,
+        onValueChange = onValueChange,
+        textStyle = TextStyle(
+            platformStyle = PlatformTextStyle(includeFontPadding = false), fontSize = 20.sp,
+            fontFamily = FontFamily(
+                Font(
+                    R.font.notosans_bold,
+                    FontWeight.Normal,
+                    FontStyle.Normal
+                )
+            ),
+        ),
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = TextStyle(platformStyle = PlatformTextStyle(includeFontPadding = false)),
+                fontSize = 20.sp,
+                fontFamily = FontFamily(
+                    Font(
+                        R.font.notosans_bold,
+                        FontWeight.Normal,
+                        FontStyle.Normal
+                    )
+                ),
+                color = Color.Black
+            )
+        },
+        singleLine = true,
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        ),
+        trailingIcon = {
+            Icon(
+                painter = painterResource(id = R.mipmap.search),
+                contentDescription = null,
+                tint = Color.Black,
+                modifier = Modifier.clickable {
+                    onTrailingIconClick()
+                }
+            )
+        },
+        keyboardActions = KeyboardActions(onDone = {
+            defaultKeyboardAction(ImeAction.Done)
+            keyboardActionsClick()
+        }),
+    )
+}
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable

@@ -6,13 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.masearch.LikeCharacterViewModel
 import com.example.masearch.mainui.MainView
-import com.example.masearch.MainViewModel
 import com.example.masearch.mainui.ParallaxEffect
 import com.example.masearch.screen.Screen
-import kotlinx.coroutines.CoroutineScope
+import com.example.masearch.view.like.LikeCharacterView
 
+
+//todo 화면 전환시 애니메이션 추가할 것
+//todo https://stackoverflow.com/questions/65643015/animating-between-composables-in-navigation-with-compose 참조
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
@@ -36,5 +37,10 @@ fun Navigation() {
             )
         }
 
+        composable(route = Screen.LikeScreen.route) {
+            LikeCharacterView(navController = navController, navigateBack = {
+                navController.popBackStack()
+            })
+        }
     }
 }

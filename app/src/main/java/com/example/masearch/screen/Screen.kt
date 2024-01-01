@@ -7,4 +7,7 @@ sealed class Screen(val route: String) {
     }
 
     object StatScreen : Screen("stat_screen")
+
+    object LikeScreen : Screen("like_screen")
+
 }
