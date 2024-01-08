@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +22,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
@@ -68,7 +73,7 @@ fun LikeCharacterHolder(likeCharacterVo: LikeCharacterVo, navController: NavCont
             )
 
             Text(
-                text = "Lv.278 ${likeCharacterVo.nickName}",
+                text = "Lv.${likeCharacterVo.level} ${likeCharacterVo.nickName}",
                 color = Color.White,
                 fontSize = 12.sp,
                 modifier = Modifier
@@ -91,7 +96,7 @@ fun LikeCharacterView(navController: NavController, navigateBack: () -> Unit) {
 
     Surface {
         Column(modifier = Modifier.background(MainBackgroundColor)) {
-            Row(modifier = Modifier.height(56.dp)) {
+            Row(modifier = Modifier.height(56.dp), verticalAlignment = Alignment.CenterVertically) {
                 GlideImage(
                     model = ContextCompat.getDrawable(context, R.mipmap.perv_btn),
                     contentDescription = "back",
@@ -102,16 +107,26 @@ fun LikeCharacterView(navController: NavController, navigateBack: () -> Unit) {
                         .align(Alignment.CenterVertically)
                         .padding(12.dp)
                 )
-
-
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "즐겨찾기", fontSize = 16.sp,
+                    fontFamily = FontFamily(
+                        Font(
+                            R.font.notosans_bold,
+                            FontWeight.Normal,
+                            FontStyle.Normal
+                        )
+                    ),
+                    color = Color.White
+                )
 
             }
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(40.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxSize()
             ) {

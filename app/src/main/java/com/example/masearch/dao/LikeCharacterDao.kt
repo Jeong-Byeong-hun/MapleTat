@@ -17,4 +17,7 @@ interface LikeCharacterDao {
 
     @Query("DELETE FROM like_table WHERE nickName = :nickName")
     suspend fun deleteData(nickName: String)
+
+    @Query("SELECT * FROM like_table WHERE nickName = :name")
+    fun getCharacterByName(name : String): LikeCharacterVo?
 }

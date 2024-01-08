@@ -9,5 +9,6 @@ data class LikeCharacterVo(
     @PrimaryKey(autoGenerate = true)
     val id : Long = 0,
     val nickName: String,
-    val imgUrl: String
+    val imgUrl: String,
+    val level : String
 )

@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -67,10 +68,13 @@ import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.screen.Screen
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
+import com.example.masearch.ui.theme.LikeBackgroundColor
 import com.example.masearch.ui.theme.MainBackgroundColor
 import com.example.masearch.util.convertToCombatPower
 import com.example.masearch.util.noRippleClickable
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -95,22 +99,22 @@ fun MainView(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GlideImage(
-                model = ContextCompat.getDrawable(LocalContext.current, R.mipmap.mapletat),
-                contentDescription = null
-            )
-//            Text(
-//                text = "MapleTat", fontSize = 26.sp,
-//                fontFamily = FontFamily(
-//                    Font(
-//                        R.font.notosans_bold,
-//                        FontWeight.Normal,
-//                        FontStyle.Normal
-//                    )
-//                ),
-//                color = Color.White
+//            GlideImage(
+//                model = ContextCompat.getDrawable(LocalContext.current, R.mipmap.mapletat),
+//                contentDescription = null
 //            )
-            Spacer(modifier = Modifier.height(30.dp))
+            Text(
+                text = "MapleTat", fontSize = 26.sp,
+                fontFamily = FontFamily(
+                    Font(
+                        R.font.notosans_bold,
+                        FontWeight.Normal,
+                        FontStyle.Normal
+                    )
+                ),
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             MainTextField(
                 value = id.text.toString(),
                 onValueChange = { s -> id = TextFieldValue(s) },
@@ -261,6 +265,7 @@ fun ParallaxEffect(
     var showDialog by remember { mutableStateOf(false) }
     var receivedText by remember { mutableStateOf(id.orEmpty()) }
     var enabled by remember { mutableStateOf(true) }
+    var isExistCharacterLike by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
@@ -272,8 +277,8 @@ fun ParallaxEffect(
         receivedText.let {
             if (receivedText.isNotEmpty()) {
                 viewModel.getUserData(it)
+                isExistCharacterLike = likeCharacterViewModel.isExistCharacter(receivedText)
             }
-
         }
     }
 
@@ -314,22 +319,43 @@ fun ParallaxEffect(
                         modifier = Modifier.width(4.dp)
                     )
 
-                    GlideImage(
-                        model = ContextCompat.getDrawable(context, R.mipmap.star),
-                        contentDescription = "like",
-                        modifier = Modifier
-                            .height(40.dp)
-                            .width(40.dp)
-                            .clickable(onClick = {
-                                likeCharacterViewModel.insertLikeCharacter(
-                                    userData!!.basic.charName,
-                                    userData!!.basic.charImage
-                                )
-                            })
-                            .align(Alignment.CenterVertically)
-                            .padding(12.dp)
+                    if (isExistCharacterLike) {
+                        GlideImage(
+                            model = ContextCompat.getDrawable(context, R.mipmap.star_full),
+                            contentDescription = "like",
+                            modifier = Modifier
+                                .height(40.dp)
+                                .width(40.dp)
+                                .clickable(onClick = {
+                                    likeCharacterViewModel.deleteLikeCharacter(
+                                        userData!!.basic.charName
+                                    )
+                                    isExistCharacterLike = false
+                                })
+                                .align(Alignment.CenterVertically)
+                                .padding(8.dp),
+                            colorFilter = ColorFilter.tint(LikeBackgroundColor)
+                        )
+                    } else {
+                        GlideImage(
+                            model = ContextCompat.getDrawable(context, R.mipmap.star),
+                            contentDescription = "like",
+                            modifier = Modifier
+                                .height(40.dp)
+                                .width(40.dp)
+                                .clickable(onClick = {
+                                    likeCharacterViewModel.insertLikeCharacter(
+                                        userData!!.basic.charName,
+                                        userData!!.basic.charImage,
+                                        userData!!.basic.level.toString()
+                                    )
+                                    isExistCharacterLike = true
+                                })
+                                .align(Alignment.CenterVertically)
+                                .padding(8.dp)
+                        )
+                    }
 
-                    )
 
                     val textModifier = Modifier
                         .graphicsLayer {
@@ -352,8 +378,10 @@ fun ParallaxEffect(
                                 showDialog = true
                                 Log.d("TAG", "ParallaxEffect: search")
                             }
-                            .padding(12.dp)
-                            .align(Alignment.CenterVertically))
+                            .padding(8.dp)
+                            .align(Alignment.CenterVertically),
+                        colorFilter = ColorFilter.tint(Color.White)
+                    )
 
                     if (showDialog) {
                         SearchDialog(onDismiss = { showDialog = false },

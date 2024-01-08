@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.masearch.api.vo.LikeCharacterVo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,10 +18,10 @@ class LikeCharacterViewModel @Inject constructor(private val likeCharacterReposi
     private val _characterData = MutableLiveData<List<LikeCharacterVo>>()
     val characterData: LiveData<List<LikeCharacterVo>> get() = _characterData
 
-    fun insertLikeCharacter(name: String, imgUrl: String) {
+    fun insertLikeCharacter(name: String, imgUrl: String, level : String) {
         viewModelScope.launch {
             try {
-                val likeCharacterVo = LikeCharacterVo(nickName = name, imgUrl = imgUrl)
+                val likeCharacterVo = LikeCharacterVo(nickName = name, imgUrl = imgUrl, level = level)
                 likeCharacterRepository.insertCharacter(likeCharacterVo)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -41,6 +43,12 @@ class LikeCharacterViewModel @Inject constructor(private val likeCharacterReposi
         likeCharacterRepository.getAllCharacterList().observeForever {
             _characterData.value = it
             Log.d("TAG", "getAllList: " + _characterData.value.toString())
+        }
+    }
+
+    suspend fun isExistCharacter(name: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            likeCharacterRepository.isExistCharacter(name)
         }
     }
 

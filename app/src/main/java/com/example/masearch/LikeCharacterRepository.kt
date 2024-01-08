@@ -17,4 +17,11 @@ class LikeCharacterRepository @Inject constructor(private val likeCharacterDao: 
     fun getAllCharacterList(): LiveData<List<LikeCharacterVo>> {
         return likeCharacterDao.getAllLickCharacter()
     }
+
+     suspend fun isExistCharacter(nickname: String) : Boolean{
+        val existCharacter = likeCharacterDao.getCharacterByName(nickname)
+        return existCharacter != null
+    }
+
+
 }

@@ -50,7 +50,7 @@ val ItemDetailRareTextColor = Color(0xFF6B8CFF)
 
 val ExceptionalTextColor = Color(0xFFF33737)
 
-val AbilityBackgroundColor = Color(0xB33C3C3C)
+val AbilityBackgroundColor = Color(0xFF3C3C3C)
 
 
 
