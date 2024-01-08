@@ -10,6 +10,7 @@ import com.example.masearch.mainui.MainView
 import com.example.masearch.mainui.ParallaxEffect
 import com.example.masearch.screen.Screen
 import com.example.masearch.view.like.LikeCharacterView
+import com.example.masearch.view.recent.RecentSearchView
 
 
 //todo 화면 전환시 애니메이션 추가할 것
@@ -41,6 +42,13 @@ fun Navigation() {
             LikeCharacterView(navController = navController, navigateBack = {
                 navController.popBackStack()
             })
+        }
+
+        composable(route = Screen.RecentSearchScreen.route) {
+            RecentSearchView(
+                navController = navController,
+                navigateBack = { navController.popBackStack() }
+            )
         }
     }
 }

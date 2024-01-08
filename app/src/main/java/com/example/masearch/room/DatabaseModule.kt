@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.masearch.dao.AppDatabase
 import com.example.masearch.dao.LikeCharacterDao
+import com.example.masearch.dao.RecentSearchDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +28,11 @@ object DatabaseModule {
     @Provides
     fun provideLikeCharacterDao(database: AppDatabase): LikeCharacterDao {
         return database.likeCharacterDao()
+    }
+
+    @Provides
+    fun provideRecentCharacterDao(database: AppDatabase) : RecentSearchDao{
+        return database.recentSearchDao()
     }
 
 }

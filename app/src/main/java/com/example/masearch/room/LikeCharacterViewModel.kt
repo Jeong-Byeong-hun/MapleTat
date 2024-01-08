@@ -1,4 +1,4 @@
-package com.example.masearch
+package com.example.masearch.room
 
 import android.util.Log
 import androidx.lifecycle.LiveData

@@ -10,4 +10,6 @@ sealed class Screen(val route: String) {
 
     object LikeScreen : Screen("like_screen")
 
+    object RecentSearchScreen : Screen("recentSearch_screen")
+
 }

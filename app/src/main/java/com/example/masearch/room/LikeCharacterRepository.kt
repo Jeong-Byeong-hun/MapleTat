@@ -1,4 +1,4 @@
-package com.example.masearch
+package com.example.masearch.room
 
 import androidx.lifecycle.LiveData
 import com.example.masearch.api.vo.LikeCharacterVo
@@ -15,10 +15,10 @@ class LikeCharacterRepository @Inject constructor(private val likeCharacterDao: 
     }
 
     fun getAllCharacterList(): LiveData<List<LikeCharacterVo>> {
-        return likeCharacterDao.getAllLickCharacter()
+        return likeCharacterDao.getAllLikeCharacter()
     }
 
-     suspend fun isExistCharacter(nickname: String) : Boolean{
+     fun isExistCharacter(nickname: String): Boolean {
         val existCharacter = likeCharacterDao.getCharacterByName(nickname)
         return existCharacter != null
     }

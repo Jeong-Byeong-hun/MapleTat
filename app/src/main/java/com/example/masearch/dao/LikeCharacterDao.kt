@@ -13,7 +13,8 @@ interface LikeCharacterDao {
     suspend fun insertLickCharacter(likeCharacterVo: LikeCharacterVo)
 
     @Query("SELECT * FROM like_table")
-    fun getAllLickCharacter(): LiveData<List<LikeCharacterVo>>
+    fun getAllLikeCharacter(): LiveData<List<LikeCharacterVo>>
+
 
     @Query("DELETE FROM like_table WHERE nickName = :nickName")
     suspend fun deleteData(nickName: String)

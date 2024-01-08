@@ -1,6 +1,7 @@
 package com.example.masearch.mainui
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -59,12 +60,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.masearch.LikeCharacterViewModel
 import com.example.masearch.MainViewModel
 import com.example.masearch.R
 import com.example.masearch.Stats
 import com.example.masearch.api.vo.FinalStatVO
+import com.example.masearch.api.vo.RecentSearchVO
 import com.example.masearch.api.vo.ResultVO
+import com.example.masearch.room.LikeCharacterViewModel
+import com.example.masearch.room.RecentSearchViewModel
 import com.example.masearch.screen.Screen
 import com.example.masearch.ui.theme.CombatPowerBackgroundColor
 import com.example.masearch.ui.theme.CombatPowerTextColor
@@ -72,9 +75,7 @@ import com.example.masearch.ui.theme.LikeBackgroundColor
 import com.example.masearch.ui.theme.MainBackgroundColor
 import com.example.masearch.util.convertToCombatPower
 import com.example.masearch.util.noRippleClickable
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
@@ -103,17 +104,20 @@ fun MainView(navController: NavController) {
 //                model = ContextCompat.getDrawable(LocalContext.current, R.mipmap.mapletat),
 //                contentDescription = null
 //            )
-            Text(
-                text = "MapleTat", fontSize = 26.sp,
-                fontFamily = FontFamily(
-                    Font(
-                        R.font.notosans_bold,
-                        FontWeight.Normal,
-                        FontStyle.Normal
-                    )
-                ),
-                color = Color.White
-            )
+            Image(painter = painterResource(id = R.mipmap.mapletat), contentDescription = "")
+
+//            Text(
+//                text = "MapleTat", fontSize = 26.sp,
+//                fontFamily = FontFamily(
+//                    Font(
+//                        R.font.notosans_bold,
+//                        FontWeight.Normal,
+//                        FontStyle.Normal
+//                    )
+//                ),
+//                color = Color.White
+//            )
+
             Spacer(modifier = Modifier.height(16.dp))
             MainTextField(
                 value = id.text.toString(),
@@ -155,8 +159,8 @@ fun MainView(navController: NavController) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                MainTextView(text = "최근검색기록", onTextClick = {
-                    Log.d("TAG", "MainView: 최근검색")
+                MainTextView(text = "최근 검색 기록", onTextClick = {
+                    navController.navigate(Screen.RecentSearchScreen.route)
                 })
                 Divider(
                     modifier = Modifier
@@ -263,21 +267,23 @@ fun ParallaxEffect(
 ) {
     val state = rememberCollapsingToolbarScaffoldState()
     var showDialog by remember { mutableStateOf(false) }
-    var receivedText by remember { mutableStateOf(id.orEmpty()) }
+    var receivedText by remember { mutableStateOf(id.orEmpty().trim()) }
     var enabled by remember { mutableStateOf(true) }
     var isExistCharacterLike by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
-    Log.d("TAG", "ParallaxEffect: receivedText " + receivedText)
 
     val viewModel: MainViewModel = hiltViewModel()
     val likeCharacterViewModel: LikeCharacterViewModel = hiltViewModel()
+    val recentSearchViewModel: RecentSearchViewModel = hiltViewModel()
 
     LaunchedEffect(key1 = receivedText) {
         receivedText.let {
             if (receivedText.isNotEmpty()) {
                 viewModel.getUserData(it)
                 isExistCharacterLike = likeCharacterViewModel.isExistCharacter(receivedText)
+                Log.d("TAG", "ParallaxEffect: $isExistCharacterLike")
+                recentSearchViewModel.insertRecentName(receivedText)
             }
         }
     }

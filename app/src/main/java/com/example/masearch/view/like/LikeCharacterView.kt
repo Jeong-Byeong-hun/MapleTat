@@ -33,58 +33,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.example.masearch.LikeCharacterViewModel
+import com.example.masearch.room.LikeCharacterViewModel
 import com.example.masearch.R
 import com.example.masearch.api.vo.LikeCharacterVo
 import com.example.masearch.screen.Screen
 import com.example.masearch.ui.theme.LikeBackgroundColor
 import com.example.masearch.ui.theme.MainBackgroundColor
 import com.example.masearch.util.noRippleClickable
-
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun LikeCharacterHolder(likeCharacterVo: LikeCharacterVo, navController: NavController) {
-
-    Surface(
-        modifier = Modifier
-            .width(120.dp)
-            .height(150.dp)
-            .noRippleClickable {
-                navController.navigate(Screen.SearchScreen.searchCharacter(likeCharacterVo.nickName))
-            }, color = LikeBackgroundColor,
-        shape = RoundedCornerShape(5.dp)
-    ) {
-        Column(modifier = Modifier.padding(8.dp)) {
-//            GlideImage(
-//                model = "https://open.api.nexon.com/static/maplestory/ItemIcon/KEPCJGME.png",
-//                contentDescription = "serverIcon",
-//                modifier = Modifier
-//                    .width(14.dp)
-//                    .height(14.dp)
-//            )
-
-            GlideImage(
-                model = likeCharacterVo.imgUrl,
-                contentDescription = "charImg",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .align(Alignment.CenterHorizontally)
-            )
-
-            Text(
-                text = "Lv.${likeCharacterVo.level} ${likeCharacterVo.nickName}",
-                color = Color.White,
-                fontSize = 12.sp,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(0.dp, 8.dp, 0.dp, 0.dp)
-            )
-        }
-
-    }
-}
-
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -143,4 +98,48 @@ fun LikeCharacterView(navController: NavController, navigateBack: () -> Unit) {
 
     }
 
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun LikeCharacterHolder(likeCharacterVo: LikeCharacterVo, navController: NavController) {
+
+    Surface(
+        modifier = Modifier
+            .width(120.dp)
+            .height(150.dp)
+            .noRippleClickable {
+                navController.navigate(Screen.SearchScreen.searchCharacter(likeCharacterVo.nickName))
+            }, color = LikeBackgroundColor,
+        shape = RoundedCornerShape(5.dp)
+    ) {
+        Column(modifier = Modifier.padding(8.dp)) {
+//            GlideImage(
+//                model = "https://open.api.nexon.com/static/maplestory/ItemIcon/KEPCJGME.png",
+//                contentDescription = "serverIcon",
+//                modifier = Modifier
+//                    .width(14.dp)
+//                    .height(14.dp)
+//            )
+
+            GlideImage(
+                model = likeCharacterVo.imgUrl,
+                contentDescription = "charImg",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .align(Alignment.CenterHorizontally)
+            )
+
+            Text(
+                text = "Lv.${likeCharacterVo.level} ${likeCharacterVo.nickName}",
+                color = Color.White,
+                fontSize = 12.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(0.dp, 8.dp, 0.dp, 0.dp)
+            )
+        }
+
+    }
 }

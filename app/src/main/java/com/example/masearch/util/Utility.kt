@@ -50,7 +50,7 @@ fun convertToCombatPower(input: String): String {
 
             unitIndex++
         }
-        Log.d("TAG", "convertToCombatPower: " + sb.toString())
+
         return sb.toString()
     } catch (e: NumberFormatException) {
         return "Invalid Number"
@@ -59,7 +59,6 @@ fun convertToCombatPower(input: String): String {
 
 fun convertTime(serverTime: String): String {
     var time = serverTime.replace("T", " ").substring(0, serverTime.indexOf("+"))
-    Log.d("TAG", "convertTime: $time")
 
     // 입력된 문자열을 LocalDateTime으로 파싱
     val dateTime = LocalDateTime.parse(time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
