@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material.Button
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -79,6 +80,7 @@ import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
+import java.lang.RuntimeException
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
@@ -105,6 +107,9 @@ fun MainView(navController: NavController) {
 //                contentDescription = null
 //            )
             Image(painter = painterResource(id = R.mipmap.mapletat), contentDescription = "")
+            Button(onClick = { throw RuntimeException("Test Crash") } ) {
+
+            }
 
 //            Text(
 //                text = "MapleTat", fontSize = 26.sp,

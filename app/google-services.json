@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "662706427065",
+    "project_id": "mapletat",
+    "storage_bucket": "mapletat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662706427065:android:8141224f50410cec6eb768",
+        "android_client_info": {
+          "package_name": "com.example.masearch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3P9MM2B5ISd2W5BiSqw3hNXpfs2PwCYU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
