@@ -207,9 +207,9 @@ fun EquipmentDialogView(item: ItemEquipmentDetailVO, onChangeState: () -> Unit) 
 
                     BasicEquipmentTextview(text = "잠재옵션", color = potentialColor)
 
-                    item.potentialOption1?.let { it1 -> PotentialText(potential = it1) }
-                    item.potentialOption2?.let { it1 -> PotentialText(potential = it1) }
-                    item.potentialOption3?.let { it1 -> PotentialText(potential = it1) }
+                    item.potentialOption1?.let { it1 -> DialogPotentialText(potential = it1) }
+                    item.potentialOption2?.let { it1 -> DialogPotentialText(potential = it1) }
+                    item.potentialOption3?.let { it1 -> DialogPotentialText(potential = it1) }
                 }
 
                 item.additionalPotentialOptionGrade?.let {
@@ -228,9 +228,9 @@ fun EquipmentDialogView(item: ItemEquipmentDetailVO, onChangeState: () -> Unit) 
 
                     BasicEquipmentTextview(text = "에디셔널", color = addColor)
 
-                    item.additionalPotentialOption1?.let { it1 -> PotentialText(potential = it1) }
-                    item.additionalPotentialOption2?.let { it1 -> PotentialText(potential = it1) }
-                    item.additionalPotentialOption3?.let { it1 -> PotentialText(potential = it1) }
+                    item.additionalPotentialOption1?.let { it1 -> DialogPotentialText(potential = it1) }
+                    item.additionalPotentialOption2?.let { it1 -> DialogPotentialText(potential = it1) }
+                    item.additionalPotentialOption3?.let { it1 -> DialogPotentialText(potential = it1) }
 
                 }
 
@@ -341,3 +341,35 @@ fun StyledPercentText(
         Text(text = text)
     }
 }
+
+@Composable
+fun DialogPotentialText(potential: String) {
+//    val uselessList = listOf<String>("공격 시", "피격", "쓸만한", "HP 회복", "반사", "MP 소모")
+//    val potentialText = when {
+//        potential.contains("몬스터 방어율 무시") -> potential.replace("몬스터 방어율 무시", "방무")
+//        potential.contains("보스 몬스터 공격 시 데미지") -> potential.replace("보스 몬스터 공격 시 데미지", "보공")
+//        potential.contains("메소 획득량") -> potential.replace("메소 획득량", "메획")
+//        potential.contains("아이템 드롭률") -> potential.replace("아이템 드롭률", "아획")
+//        potential.contains("모든 스킬의 재사용 대기시간") -> potential.replace("모든 스킬의 재사용 대기시간", "쿨감")
+//        potential.contains("크리티컬 데미지") -> potential.replace("크리티컬 데미지", "크뎀")
+//        potential.contains("캐릭터 기준 9레벨 당") -> potential.replace("캐릭터 기준 9레벨 당", "렙당")
+//        potential.contains("공격 시") -> ""
+//        potential.contains("피격") -> ""
+//        potential.contains("쓸만한") -> ""
+//        potential.contains("HP 회복") -> ""
+//        potential.contains("반사") -> ""
+//        potential.contains("MP 소모") -> ""
+//        else -> potential
+//    }
+
+    if (potential.isEmpty()) {
+        return
+    }
+
+
+
+    BasicEquipmentTextview(text = "$potential")
+
+    Spacer(modifier = Modifier.width(6.dp))
+}
+
