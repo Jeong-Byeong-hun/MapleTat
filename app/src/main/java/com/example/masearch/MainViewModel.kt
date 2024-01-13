@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
 
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> get() = _errorLiveData
-    fun clearErrorData() {
+    private fun clearErrorData() {
         _errorLiveData.value = null
     }
 
@@ -26,14 +26,11 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
         viewModelScope.launch {
             try {
                 val result = userRepository.getUserData(id)
-                Timber.d(_userData.toString())
                 _userData.value = result
-                _errorLiveData.value = ""
+                clearErrorData()
             } catch (e: Exception) {
-                _errorLiveData.value = "아이디를 다시 한 번 확인 해주세요."
-                e.printStackTrace()
+                _errorLiveData.value = e.message.toString()
             }
-
         }
     }
 

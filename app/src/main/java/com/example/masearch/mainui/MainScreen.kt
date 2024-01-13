@@ -107,9 +107,6 @@ fun MainView(navController: NavController) {
 //                contentDescription = null
 //            )
             Image(painter = painterResource(id = R.mipmap.mapletat), contentDescription = "")
-            Button(onClick = { throw RuntimeException("Test Crash") } ) {
-
-            }
 
 //            Text(
 //                text = "MapleTat", fontSize = 26.sp,
@@ -287,14 +284,13 @@ fun ParallaxEffect(
             if (receivedText.isNotEmpty()) {
                 viewModel.getUserData(it)
                 isExistCharacterLike = likeCharacterViewModel.isExistCharacter(receivedText)
-                Log.d("TAG", "ParallaxEffect: $isExistCharacterLike")
                 recentSearchViewModel.insertRecentName(receivedText)
             }
         }
     }
 
     val userData by viewModel.userData.observeAsState()
-
+    val errorData by viewModel.errorLiveData.observeAsState()
     Column {
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
             state = state,
@@ -355,6 +351,9 @@ fun ParallaxEffect(
                                 .height(40.dp)
                                 .width(40.dp)
                                 .clickable(onClick = {
+                                    if (userData?.basic == null)
+                                        return@clickable
+
                                     likeCharacterViewModel.insertLikeCharacter(
                                         userData!!.basic.charName,
                                         userData!!.basic.charImage,
@@ -424,6 +423,12 @@ fun ParallaxEffect(
                     .fillMaxSize()
                     .background(MainBackgroundColor)
             ) {
+                if (errorData != null){
+                    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+                        CharacterInfoText(text = errorData.toString())
+                    }
+
+                }
                 MainAvatar(userData = userData)
             }
 
@@ -436,7 +441,7 @@ fun ParallaxEffect(
 fun ToolbarNickName(modifier: Modifier, userData: ResultVO?) {
 
     if (userData != null) {
-        if (userData.basic == null) {
+        if (userData.basic.charName == null) {
             return
         }
 

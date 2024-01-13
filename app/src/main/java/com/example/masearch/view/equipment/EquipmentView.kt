@@ -37,6 +37,7 @@ import com.example.masearch.ui.theme.EpicBackgroundColor
 import com.example.masearch.ui.theme.LegendaryBackgroundColor
 import com.example.masearch.ui.theme.RareBackgroundColor
 import com.example.masearch.ui.theme.UniqueBackgroundColor
+import com.example.masearch.util.AddOptionCalculator
 import com.example.masearch.util.convertTime
 import com.example.masearch.util.equipmentSort
 import com.example.masearch.util.noRippleClickable
@@ -98,15 +99,19 @@ fun Equipment(itemsVo: ItemEquipmentDetailVO, jobClass: String) {
                 Spacer(modifier = Modifier.width(4.dp))
 
                 //todo 추옵설정
-//                if (itemsVo.itemSlot == "무기") {
-//
-//                    BasicEquipmentTextview(
-//                        text = AddOptionCalculator().calculateAddOption(
-//                            itemsVo,
-//                            jobClass.split("/")[1]
-//                        ).toString() + "급"
-//                    )
-//                }
+                if (itemsVo.itemSlot == "무기") {
+
+                    BasicEquipmentTextview(
+                        text = AddOptionCalculator().getWeaponAddOption(
+                            itemBaseOption = itemsVo.itemBaseOption,
+                            itemAddOption = itemsVo.itemAddOption,
+                            jobClass = jobClass,
+                            itemLevel = itemsVo.itemBaseOption.baseEquipmentLevel
+                        ).toString()
+                    )
+                } else {
+
+                }
             }
 
             Column {
