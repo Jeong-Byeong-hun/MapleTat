@@ -110,7 +110,14 @@ fun Equipment(itemsVo: ItemEquipmentDetailVO, jobClass: String) {
                         ).toString()
                     )
                 } else {
-
+                    BasicEquipmentTextview(
+                        text = AddOptionCalculator().getAddOption(
+                            itemBaseOption = itemsVo.itemBaseOption,
+                            itemAddOption = itemsVo.itemAddOption,
+                            jobClass = jobClass,
+                            itemName = itemsVo.itemName
+                        )
+                    )
                 }
             }
 

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Button
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -65,7 +64,6 @@ import com.example.masearch.MainViewModel
 import com.example.masearch.R
 import com.example.masearch.Stats
 import com.example.masearch.api.vo.FinalStatVO
-import com.example.masearch.api.vo.RecentSearchVO
 import com.example.masearch.api.vo.ResultVO
 import com.example.masearch.room.LikeCharacterViewModel
 import com.example.masearch.room.RecentSearchViewModel
@@ -80,7 +78,6 @@ import kotlinx.coroutines.launch
 import me.onebone.toolbar.CollapsingToolbarScaffold
 import me.onebone.toolbar.ScrollStrategy
 import me.onebone.toolbar.rememberCollapsingToolbarScaffoldState
-import java.lang.RuntimeException
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
@@ -423,10 +420,10 @@ fun ParallaxEffect(
                     .fillMaxSize()
                     .background(MainBackgroundColor)
             ) {
-                if (errorData != null){
-                    Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-                        CharacterInfoText(text = errorData.toString())
-                    }
+                if (errorData != null) {
+                    SearchFailedDialog(
+                        errorData = errorData.toString(),
+                        onDismiss = { viewModel.clearErrorData() })
 
                 }
                 MainAvatar(userData = userData)

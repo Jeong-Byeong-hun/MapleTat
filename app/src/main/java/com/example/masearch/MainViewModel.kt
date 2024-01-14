@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
 
     private val _errorLiveData = MutableLiveData<String>()
     val errorLiveData: LiveData<String> get() = _errorLiveData
-    private fun clearErrorData() {
+    fun clearErrorData() {
         _errorLiveData.value = null
     }
 

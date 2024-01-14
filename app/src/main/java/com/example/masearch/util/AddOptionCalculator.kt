@@ -1,6 +1,5 @@
 package com.example.masearch.util
 
-import android.util.Log
 import com.example.masearch.api.vo.ItemOptionDetailVO
 import kotlin.math.floor
 
@@ -34,7 +33,7 @@ class AddOptionCalculator {
     private val absolabsAddOption: MutableMap<String, String> =
         mutableMapOf("0.51" to "1추", "0.40" to "2추", "0.30" to "3추", "0.22" to "4추", "0.15" to "5추")
 
-    private val fafnirAddOption : MutableMap<String, String> =
+    private val fafnirAddOption: MutableMap<String, String> =
         mutableMapOf("0.41" to "1추", "0.32" to "2추", "0.24" to "3추", "0.17" to "4추", "0.12" to "5추")
 
     private val strList = listOf<String>(
@@ -53,7 +52,6 @@ class AddOptionCalculator {
         "미하일",
         "블래스터",
         "데몬슬리어",
-        "데몬어벤져",
         "아란",
         "카이저",
         "아델",
@@ -135,7 +133,30 @@ class AddOptionCalculator {
     private val xenonList = listOf<String>("제논")
 
 
-    fun getAddOption(itemOption: ItemOptionDetailVO, jobClass: String): String {
+    fun getAddOption(
+        itemBaseOption: ItemOptionDetailVO,
+        itemAddOption: ItemOptionDetailVO,
+        itemName: String,
+        jobClass: String
+    ): String {
+
+        if (strList.contains(jobClass)) {
+            return getStrAddOption(itemAddOption)
+        } else if (dexList.contains(jobClass)) {
+            return getDexAddOption(itemAddOption)
+        } else if (intList.contains(jobClass)) {
+            return getIntAddOption(itemAddOption)
+        } else if (lukList.contains(jobClass)) {
+            return getLukAddOption(itemAddOption)
+        } else if (hpList.contains(jobClass)) {
+            return getHpAddOption(
+                itemBaseOption = itemBaseOption,
+                itemAddOption = itemAddOption,
+                itemName = itemName
+            )
+        } else if (xenonList.contains(jobClass)) {
+            return getXenonAddOption(itemAddOption)
+        }
 
         return ""
     }
@@ -147,7 +168,6 @@ class AddOptionCalculator {
         itemLevel: Int
     ): String {
 
-
         val weaponAddOption = if (intList.find { it.startsWith(jobClass) } != null) {
             (itemAddOption.magicPower.toDouble() / itemBaseOption.magicPower.toDouble())
         } else {
@@ -156,21 +176,25 @@ class AddOptionCalculator {
 
         var weaponOption = ""
 
-        when(itemLevel){
+        when (itemLevel) {
             200 -> {
                 if (arcaneAddOption[(floor(weaponAddOption * 100) / 100).toString()] != null) {
-                    weaponOption = arcaneAddOption[(floor(weaponAddOption * 100) / 100).toString()].toString()
+                    weaponOption =
+                        arcaneAddOption[(floor(weaponAddOption * 100) / 100).toString()].toString()
                 }
             }
+
             160 -> {
                 if (absolabsAddOption[(floor(weaponAddOption * 100) / 100).toString()] != null) {
-                    weaponOption = absolabsAddOption[(floor(weaponAddOption * 100) / 100).toString()].toString()
+                    weaponOption =
+                        absolabsAddOption[(floor(weaponAddOption * 100) / 100).toString()].toString()
                 }
             }
 
             150 -> {
                 if (fafnirAddOption[(floor(weaponAddOption * 100) / 100).toString()] != null) {
-                    weaponOption = fafnirAddOption[(floor(weaponAddOption * 100) / 100).toString()].toString()
+                    weaponOption =
+                        fafnirAddOption[(floor(weaponAddOption * 100) / 100).toString()].toString()
                 }
             }
         }
@@ -184,6 +208,86 @@ class AddOptionCalculator {
         }
 
         return weaponOption + ""
+    }
+
+    private fun getStrAddOption(itemOption: ItemOptionDetailVO): String {
+        var addOption = 0
+
+        addOption += itemOption.str.toInt() + (itemOption.attackPower.toInt() * 4) + (itemOption.allStat.toInt() * 10)
+
+        if (addOption == 0) {
+            return ""
+        }
+        return addOption.toString() + "급"
+    }
+
+    private fun getDexAddOption(itemOption: ItemOptionDetailVO): String {
+        var addOption = 0
+
+        addOption += itemOption.dex.toInt() + (itemOption.attackPower.toInt() * 4) + (itemOption.allStat.toInt() * 10)
+        if (addOption == 0) {
+            return ""
+        }
+        return addOption.toString() + "급"
+    }
+
+    private fun getIntAddOption(itemOption: ItemOptionDetailVO): String {
+        var addOption = 0
+
+        addOption += itemOption.int.toInt() + (itemOption.magicPower.toInt() * 4) + (itemOption.allStat.toInt() * 10)
+        if (addOption == 0) {
+            return ""
+        }
+        return addOption.toString() + "급"
+    }
+
+    private fun getLukAddOption(itemOption: ItemOptionDetailVO): String {
+        var addOption = 0
+
+        addOption += itemOption.luk.toInt() + (itemOption.attackPower.toInt() * 4) + (itemOption.allStat.toInt() * 10)
+        if (addOption == 0) {
+            return ""
+        }
+        return addOption.toString() + "급"
+    }
+
+    private fun getXenonAddOption(itemOption: ItemOptionDetailVO): String {
+        var addOption = 0
+
+//        (힘 + 덱 + 럭 + 공[x5~6] +올텟[x20]) / 2
+        addOption += ((itemOption.str.toInt() + itemOption.dex.toInt() + itemOption.luk.toInt() + (itemOption.attackPower.toInt() * 6)) + (itemOption.allStat.toInt() * 20)) / 2
+        if (addOption == 0) {
+            return ""
+        }
+        return addOption.toString() + "급"
+    }
+
+    private fun getHpAddOption(
+        itemBaseOption: ItemOptionDetailVO,
+        itemAddOption: ItemOptionDetailVO,
+        itemName: String
+    ): String {
+
+        if (itemAddOption.maxHp.toInt() == 0) {
+            return ""
+        }
+
+        var addOption = 8
+
+        if (itemName.contains("혼테일")) {
+            addOption = 6
+        }
+
+        var hpAddOption =
+            itemAddOption.maxHp.toInt() / (itemBaseOption.baseEquipmentLevel / 10 * 10)
+        hpAddOption /= 3
+        addOption -= hpAddOption
+
+        if (addOption == 8) {
+            return ""
+        }
+
+        return "HP ${addOption}추"
     }
 
 }

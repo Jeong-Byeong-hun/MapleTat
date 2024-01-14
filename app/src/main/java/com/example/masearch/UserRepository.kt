@@ -21,7 +21,7 @@ class UserRepository @Inject constructor(private val characterSearch: CharacterS
                 throw Exception("23.12.21 이후 접속한 캐릭터만 검색 가능합니다.")
             }
         } catch (e: Exception) {
-            throw Exception("해당 캐릭터를 찾을 수 없습니다. 아이디를 확인 해 주세요. \n 23.12.21 이후 접속한 캐릭터만 검색 가능합니다.")
+            throw Exception("해당 캐릭터를 찾을 수 없습니다. 아이디를 확인 해 주세요.\n영어 대소문자를 구분해주세요.\n23.12.21 이후 접속한 캐릭터만 검색 가능합니다. ")
         }
     }
 }
