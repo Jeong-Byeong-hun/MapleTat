@@ -268,7 +268,7 @@ class AddOptionCalculator {
         itemName: String
     ): String {
 
-        if (itemAddOption.maxHp.toInt() == 0) {
+        if (itemAddOption.maxHp.toInt() == 0 || itemBaseOption.baseEquipmentLevel == 0) {
             return ""
         }
 
