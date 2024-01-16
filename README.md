@@ -29,9 +29,6 @@ Room
 MVVM
 
 
-AAC
-
-
 기본 예상도 및 Navigation 구조
 
 
