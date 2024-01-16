@@ -1,8 +1,7 @@
-# MaSearch
- 메이플 캐릭터 검색
+# MapleTat (Maple + Stat)
 
 
-12월에 나오는 API로 교체 
+메이플 캐릭터 검색
 
 
 사용한 기술 
