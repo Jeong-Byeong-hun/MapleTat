@@ -27,4 +27,10 @@
 - Room
 - MVVM
 
+---
+
+### 메인화면
+
+![Screenshot_2024 01 25_22 14 34 264](https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/14dddb3d-0fba-4680-8a55-c098827c07a3)
+
 
