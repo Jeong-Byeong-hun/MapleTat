@@ -40,7 +40,7 @@
 
 
 ### 검색 결과 화면 (캐릭터 스탯)
-<div style="float:left; margin-right:10px;">
+
   <img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/c460bef2-fdb6-4139-b2a2-16fd7a507c08" alt="스탯" width="300">
 
   
@@ -54,15 +54,13 @@
 
 
 ### 검색 결과 화면 (장착한 장비)
-  <br>
   <img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/e4aaecc6-8fdf-4224-827a-adc95d8ddd14" alt="장비아이템" width="300">
-  
 
+  
   장착한 아이템의 정보를 볼 수 있습니다.
 
 
 ### 장비아이템 상세보기
-  <br>
   <img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/d42e4b78-fa8d-4130-b061-92fbddf32e6a" alt="장비아이템 상세정보" width="300">
 
 
@@ -70,7 +68,6 @@
 
 
 ### 최근 검색 기록
-  <br>
   <img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/e38c7ca7-6dab-4250-aef0-6ba18c385c07" alt="최근 검색 기록" width="300">
   
 
@@ -78,7 +75,6 @@
 
 
 ### 즐겨찾기
-  <br>
   <img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/c1338283-b215-4971-aebe-a9e6e7bf3eb8" alt="즐겨찾기" width="300">
   
 
@@ -86,7 +82,6 @@
 
 
 ### 에러
-  <br>
   <img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/31159dbe-4c67-40c8-90e2-ef0629b49560" alt="에러메세지" width="300">
   
 
@@ -95,7 +90,6 @@
   
   현재 넥슨측에서 제공하는 API를 이용하고 있으며 해당 API의 결과를 받기 위해서 캐릭터의 최근 접속일이 23.12.21 이후인 캐릭터들만 조회가 가능합니다.
 
-</div>
 
 
 ---
