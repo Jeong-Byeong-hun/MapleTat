@@ -28,7 +28,7 @@
 
 ---
 
-### 메인화면
+### [메인화면](https://github.com/Jeong-Byeong-hun/MapleTat/wiki/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4)
 
 
 <div style="float:left; margin-right:10px;">
