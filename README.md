@@ -32,8 +32,6 @@
 ### 메인화면
 
 
-<img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/14dddb3d-0fba-4680-8a55-c098827c07a3" alt="메인 화면" width="500">
+<img src="https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/14dddb3d-0fba-4680-8a55-c098827c07a3" alt="메인 화면" width="300">
 
-
-![Screenshot_2024 01 25_22 14 34 264](https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/7d7abfc3-abd7-4f3a-a18d-c29105b5c4cb)
 
