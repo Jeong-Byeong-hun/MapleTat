@@ -31,6 +31,8 @@
 
 ### 메인화면
 
-![Screenshot_2024 01 25_22 14 34 264](https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/14dddb3d-0fba-4680-8a55-c098827c07a3)
+
+<img src="[이미지_경로_또는_URL](https://github.com/Jeong-Byeong-hun/MaSearch/assets/46989392/14dddb3d-0fba-4680-8a55-c098827c07a3)" alt="메인 화면" width="500">
+
 
 
