@@ -13,7 +13,6 @@
 - CompileSdk - 34
 - minSdk - 28
 - targetSdk - 33
-- JDK - java8
 
 **Tech Stack:**
 
