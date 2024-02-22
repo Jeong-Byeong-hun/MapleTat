@@ -9,7 +9,7 @@ class BaseApplication : Application() {
     init {
         INSTANCE = this
     }
-
+    
     companion object {
         lateinit var INSTANCE: BaseApplication
     }

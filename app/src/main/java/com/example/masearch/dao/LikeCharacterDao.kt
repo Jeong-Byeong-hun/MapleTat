@@ -16,6 +16,7 @@ interface LikeCharacterDao {
     fun getAllLikeCharacter(): LiveData<List<LikeCharacterVo>>
 
 
+
     @Query("DELETE FROM like_table WHERE nickName = :nickName")
     suspend fun deleteData(nickName: String)
 

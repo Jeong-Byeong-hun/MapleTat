@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:662706427065:android:8141224f50410cec6eb768",
+        "mobilesdk_app_id": "1:662706427065:android:c5cbfdf20cebde636eb768",
         "android_client_info": {
-          "package_name": "com.example.masearch"
+          "package_name": "com.maple.masearch"
         }
       },
       "oauth_client": [],

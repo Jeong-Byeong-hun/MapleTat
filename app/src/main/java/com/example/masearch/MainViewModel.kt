@@ -33,6 +33,4 @@ class MainViewModel @Inject constructor(private val userRepository: UserReposito
             }
         }
     }
-
-
 }

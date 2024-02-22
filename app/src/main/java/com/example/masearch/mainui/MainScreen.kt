@@ -99,23 +99,8 @@ fun MainView(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-//            GlideImage(
-//                model = ContextCompat.getDrawable(LocalContext.current, R.mipmap.mapletat),
-//                contentDescription = null
-//            )
-            Image(painter = painterResource(id = R.mipmap.mapletat), contentDescription = "")
 
-//            Text(
-//                text = "MapleTat", fontSize = 26.sp,
-//                fontFamily = FontFamily(
-//                    Font(
-//                        R.font.notosans_bold,
-//                        FontWeight.Normal,
-//                        FontStyle.Normal
-//                    )
-//                ),
-//                color = Color.White
-//            )
+            Image(painter = painterResource(id = R.mipmap.mapletat), contentDescription = "")
 
             Spacer(modifier = Modifier.height(16.dp))
             MainTextField(
