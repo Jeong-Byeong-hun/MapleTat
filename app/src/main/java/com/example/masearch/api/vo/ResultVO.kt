@@ -4,20 +4,20 @@ import com.google.gson.annotations.SerializedName
 
 data class ResultVO(
     @SerializedName("basic")
-    val basic: BasicVO,
+    val basic: BasicVO = BasicVO(),
 
     @SerializedName("stat")
-    val stat: StatVO,
+    val stat: StatVO = StatVO(),
 
     @SerializedName("hyper-stat")
-    val hyperStat: HyperStatVO,
+    val hyperStat: HyperStatVO = HyperStatVO(),
 
     @SerializedName("ability")
-    val ability: AbilityVO,
+    val ability: AbilityVO = AbilityVO(),
 
     @SerializedName("item-equipment")
-    val itemEquipment : ItemEquipmentVO,
+    val itemEquipment: ItemEquipmentVO = ItemEquipmentVO(),
 
     @SerializedName("dojang")
-    val dojang: DojangVO
+    val dojang: DojangVO = DojangVO()
 )

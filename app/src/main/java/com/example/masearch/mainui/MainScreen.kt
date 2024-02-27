@@ -30,8 +30,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -261,6 +261,9 @@ fun ParallaxEffect(
     val likeCharacterViewModel: LikeCharacterViewModel = hiltViewModel()
     val recentSearchViewModel: RecentSearchViewModel = hiltViewModel()
 
+    val userData by viewModel.userData.collectAsState()
+    val errorData by viewModel.errorLiveData.collectAsState()
+
     LaunchedEffect(key1 = receivedText) {
         receivedText.let {
             if (receivedText.isNotEmpty()) {
@@ -271,8 +274,6 @@ fun ParallaxEffect(
         }
     }
 
-    val userData by viewModel.userData.observeAsState()
-    val errorData by viewModel.errorLiveData.observeAsState()
     Column {
         CollapsingToolbarScaffold(modifier = Modifier.fillMaxSize(),
             state = state,
@@ -317,7 +318,7 @@ fun ParallaxEffect(
                                 .width(40.dp)
                                 .clickable(onClick = {
                                     likeCharacterViewModel.deleteLikeCharacter(
-                                        userData!!.basic.charName
+                                        userData.basic.charName
                                     )
                                     isExistCharacterLike = false
                                 })
@@ -333,13 +334,13 @@ fun ParallaxEffect(
                                 .height(40.dp)
                                 .width(40.dp)
                                 .clickable(onClick = {
-                                    if (userData?.basic == null)
+                                    if (userData.basic.charName.isEmpty())
                                         return@clickable
 
                                     likeCharacterViewModel.insertLikeCharacter(
-                                        userData!!.basic.charName,
-                                        userData!!.basic.charImage,
-                                        userData!!.basic.level.toString()
+                                        userData.basic.charName,
+                                        userData.basic.charImage,
+                                        userData.basic.level.toString()
                                     )
                                     isExistCharacterLike = true
                                 })
@@ -405,7 +406,7 @@ fun ParallaxEffect(
                     .fillMaxSize()
                     .background(MainBackgroundColor)
             ) {
-                if (errorData != null) {
+                if (errorData.isNotEmpty()) {
                     SearchFailedDialog(
                         errorData = errorData.toString(),
                         onDismiss = { viewModel.clearErrorData() })
@@ -463,7 +464,7 @@ fun CharacterInfoText(text: String) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
+fun ToolbarView(userData: ResultVO, glideModifier: Modifier) {
 
     if (userData != null) {
         Column(
@@ -541,7 +542,7 @@ fun ToolbarView(userData: ResultVO?, glideModifier: Modifier) {
 }
 
 @Composable
-fun MainAvatar(userData: ResultVO?) {
+fun MainAvatar(userData: ResultVO) {
 
     if (userData != null) {
         if (userData.stat == null) return
@@ -553,6 +554,9 @@ fun MainAvatar(userData: ResultVO?) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CombatPower(finalStatList: List<FinalStatVO>) {
+    if (finalStatList.isEmpty()) {
+        return
+    }
     val context = LocalContext.current
     Surface(
         color = CombatPowerBackgroundColor,

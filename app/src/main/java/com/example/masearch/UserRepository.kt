@@ -1,7 +1,9 @@
 package com.example.masearch
 
+import android.util.Log
 import com.example.masearch.api.CharacterSearch
 import com.example.masearch.api.vo.ResultVO
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(private val characterSearch: CharacterSearch) {
@@ -13,9 +15,10 @@ class UserRepository @Inject constructor(private val characterSearch: CharacterS
         try {
             val data = characterSearch.getCharacterInfo(userId)
             if (data.body() != null) {
-                if (data.body()!!.basic.charName == null){
+                if (data.body()!!.basic.charName.isEmpty()){
                     throw Exception("23.12.21 이후 접속한 캐릭터만 검색 가능합니다.")
                 }
+                Log.d("TAG", "getUserData: " + data.body()!!.basic)
                 return data.body()!!
             } else {
                 throw Exception("23.12.21 이후 접속한 캐릭터만 검색 가능합니다.")

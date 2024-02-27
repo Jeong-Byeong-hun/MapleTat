@@ -17,6 +17,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -40,8 +41,7 @@ import com.example.masearch.ui.theme.HyperStatUnSelectBoxColor
 
 @Composable
 fun HyperStatView(modifier: Modifier, hyperStat: HyperStatVO) {
-    var selectedButton by remember { mutableIntStateOf(hyperStat.usePresetNum.toInt()) }
-
+    var selectedButton = hyperStat.usePresetNum.toInt()
 
     Surface(color = HyperStatBackgroundColor, shape = RoundedCornerShape(5.dp)) {
         Column(modifier = modifier) {
