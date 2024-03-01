@@ -94,4 +94,5 @@
 
 ---
 
+03.01 - LiveData를 사용하는 부분 모두 StateFlow로 변경 DomainLayer에 Kotlin만 사용하도록 하기 위함
 
