@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.masearch.api.vo.LikeCharacterVo
+import kotlinx.coroutines.flow.StateFlow
 
 @Dao
 interface LikeCharacterDao {
@@ -13,7 +14,7 @@ interface LikeCharacterDao {
     suspend fun insertLickCharacter(likeCharacterVo: LikeCharacterVo)
 
     @Query("SELECT * FROM like_table")
-    fun getAllLikeCharacter(): LiveData<List<LikeCharacterVo>>
+    fun getAllLikeCharacter(): List<LikeCharacterVo>
 
 
 

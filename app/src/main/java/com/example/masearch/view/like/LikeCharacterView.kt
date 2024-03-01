@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,8 +48,10 @@ import com.example.masearch.util.noRippleClickable
 fun LikeCharacterView(navController: NavController, navigateBack: () -> Unit) {
     val likeCharacterViewModel: LikeCharacterViewModel = hiltViewModel()
     val context = LocalContext.current
+    val likeCharacterList by likeCharacterViewModel.characterData.collectAsState()
 
     likeCharacterViewModel.getAllList()
+
 
     Surface {
         Column(modifier = Modifier.background(MainBackgroundColor)) {
@@ -85,7 +89,7 @@ fun LikeCharacterView(navController: NavController, navigateBack: () -> Unit) {
                 modifier = Modifier
                     .fillMaxSize()
             ) {
-                likeCharacterViewModel.characterData.value?.let {
+                likeCharacterList.let {
                     items(it.size) { num ->
                         LikeCharacterHolder(
                             likeCharacterVo = it[num],

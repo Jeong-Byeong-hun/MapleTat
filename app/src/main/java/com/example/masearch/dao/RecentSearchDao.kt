@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.masearch.api.vo.RecentSearchVO
+import kotlinx.coroutines.flow.StateFlow
 
 @Dao
 interface RecentSearchDao {
@@ -13,7 +14,7 @@ interface RecentSearchDao {
     suspend fun insertRecentName(recentSearchVO: RecentSearchVO)
 
     @Query("SELECT * FROM recent_table ORDER BY id DESC")
-    fun getAllListName(): LiveData<List<RecentSearchVO>>
+    fun getAllListName(): List<RecentSearchVO>
 
     @Query("DELETE FROM recent_table WHERE nickName = :nickName")
     suspend fun deleteRecentNameData(nickName: String)

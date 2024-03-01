@@ -18,6 +18,8 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,16 +49,13 @@ import com.example.masearch.util.noRippleClickable
 @Composable
 fun RecentSearchView(navController: NavController, navigateBack: () -> Unit) {
     val recentSearchViewModel: RecentSearchViewModel = hiltViewModel()
+    val recentNameList by recentSearchViewModel.recentSearchData.collectAsState()
 
-    val recentNameList = remember {
-        mutableStateListOf<RecentSearchVO>()
-    }
-
-    LaunchedEffect(true) {
-        recentSearchViewModel.recentSearchData.value?.let {
-            recentNameList.addAll(it)
-        }
-    }
+//    LaunchedEffect(true) {
+//        recentSearchViewModel.recentSearchData.value?.let {
+//            recentNameList.addAll(it)
+//        }
+//    }
 
     Surface(color = MainBackgroundColor) {
         Column(modifier = Modifier.background(MainBackgroundColor)) {
@@ -98,7 +97,7 @@ fun RecentSearchView(navController: NavController, navigateBack: () -> Unit) {
                             navController = navController,
                             onDeleteName = { name ->
                                 recentSearchViewModel.deleteRecentName(name = name)
-                                recentNameList.removeAt(num)
+//                                recentNameList.removeAt(num)
                             })
                     }
                 }

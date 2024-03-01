@@ -3,6 +3,7 @@ package com.example.masearch.room
 import androidx.lifecycle.LiveData
 import com.example.masearch.api.vo.LikeCharacterVo
 import com.example.masearch.dao.LikeCharacterDao
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class LikeCharacterRepository @Inject constructor(private val likeCharacterDao: LikeCharacterDao) {
@@ -14,7 +15,7 @@ class LikeCharacterRepository @Inject constructor(private val likeCharacterDao: 
         likeCharacterDao.deleteData(nickname)
     }
 
-    fun getAllCharacterList(): LiveData<List<LikeCharacterVo>> {
+    fun getAllCharacterList(): List<LikeCharacterVo> {
         return likeCharacterDao.getAllLikeCharacter()
     }
 
